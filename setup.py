@@ -13,7 +13,11 @@ setup(
     install_requires=[
         'numpy',
         'pandas',
+        'sklearn',
+        'collections',
+        'transformers',
         'torch',
+        'scipy',
 
     ],
     classifiers=[
