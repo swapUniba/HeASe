@@ -1,1 +1,1 @@
-from .embedding_system import SustainaMeal
+from .sustainameal import SustainaMeal

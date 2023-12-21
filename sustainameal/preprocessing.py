@@ -1,0 +1,19 @@
+# preprocessing.py
+
+def remove_duplicate_titles(df):
+    """
+    Removes recipes with duplicate titles.
+
+    :param df: DataFrame containing the recipes.
+    :return: DataFrame with duplicates removed.
+    """
+    return df.drop_duplicates(subset='title', keep='first')
+
+def remove_recipes_without_tags(df):
+    """
+    Removes recipes that don't have any tags.
+
+    :param df: DataFrame containing the recipes.
+    :return: DataFrame with recipes without tags removed.
+    """
+    return df[df['tags'].notna() & (df['tags'] != '')]
