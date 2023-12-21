@@ -8,7 +8,7 @@ setup(
     description='A library to suggest more sustainable or healthy alternative recipes.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/tuo-username/SustainaMeal',  # URL del repository GitHub
+    url='https://github.com/GiovTemp/SustainaMeal.git',
     packages=find_packages(),
     install_requires=[
         'numpy',
@@ -17,21 +17,18 @@ setup(
 
     ],
     classifiers=[
-        'Development Status :: 3 - Alpha',  # Cambia se necessario
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.8',  # Assicurati che corrisponda alla versione Python che stai utilizzando
-        'Programming Language :: Python :: 3.9',
-        # Aggiungi altri classifier pertinenti
+        'Programming Language :: Python :: 3.11',
     ],
-    python_requires='>=3.6',  # Specifica la versione minima di Python richiesta
-    # Se la tua libreria contiene dati o altri file di tipo non-Python, usa questo parametro per includerli
+    python_requires='>=3.8',
     include_package_data=True,
-    # Se hai dei script o dei comandi da installare insieme alla tua libreria, puoi specificarli qui
+
     entry_points={
         'console_scripts': [
-            'my-command=SustainaMeal.module:main_function',  # Un esempio
+            'my-command=SustainaMeal.module:main_function',
         ],
     },
 )
