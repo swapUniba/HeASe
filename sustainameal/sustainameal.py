@@ -12,8 +12,9 @@ class SustainaMeal:
 
         :param recipe_df: Datframe containing the recipes.
         :param ingredients_df: Datframe containing the ingredients for the sustanability computation.
-        :param transformer_name: Name of the transformer model to use for embeddings.
         :param nutrients: List of nutrient names to use.
+        :param transformer_name: Name of the transformer model to use for embeddings.
+
         """
         # Load the recipes and ingredients data from CSV files
         self.ingredients_df = ingredients_df
