@@ -49,8 +49,17 @@ Default transformer davanstrien/autotrain-recipes-2451975973
 similar_recipes = sm.find_similar_recipes("Quinoa Salad", k=5)
 ```
 
+## Order by healthiness score
+```bash
+score_metric="who_score" #Name of the column of your dataset
+# Default value : who_score
+healthier_recipes = sm.order_recipe_by_healthiness(score_metric)
+```
+
 ## Display the recommendations
 ```bash
-for recipe in similar_recipes:
+for recipe in healthier_recipes:
     print(recipe)
 ```
+
+
