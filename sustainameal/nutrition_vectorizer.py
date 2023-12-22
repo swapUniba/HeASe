@@ -45,8 +45,5 @@ class NutritionVectorizer:
         # Create a DataFrame for the normalized nutrient vectors
         normalized_df = pd.DataFrame(normalized_nutrient_data, columns=self.nutrients, index=recipes_df.index)
 
-        # Combine with recipe_id
-        nutrient_vectors_df = pd.concat([recipes_df[['recipe_id']], normalized_df], axis=1)
-
-        return nutrient_vectors_df
+        return normalized_df
 

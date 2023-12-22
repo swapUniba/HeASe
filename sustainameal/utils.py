@@ -17,7 +17,6 @@ def calculate_normalized_nutrient_centroid(recipe_indices, recipes_df, nutrients
 
     # Filter the DataFrame for the specified recipe IDs
     filtered_recipes = recipes_df[recipes_df['recipe_id'].isin(recipe_indices)]
-
     # Extract the nutrient values of interest
     nutrient_data = filtered_recipes[nutrients]
 
@@ -27,7 +26,10 @@ def calculate_normalized_nutrient_centroid(recipe_indices, recipes_df, nutrients
     # Calculate the normalized nutrient centroid
     centroid = normalized_nutrient_data.mean(axis=0)
 
-    return centroid
+    centroid_array = centroid.to_numpy()
+    centroid_array = centroid_array.reshape(1, -1)
+
+    return centroid_array
 
 
 

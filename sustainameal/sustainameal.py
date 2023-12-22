@@ -86,7 +86,7 @@ class SustainaMeal:
             tags_to_match = [tag for tag in tags_of_most_similar_recipe if tag in acceptable_tags]
 
             tags_to_match.append('healthy')  # We add the 'healthy' tag for recovery
-            print("tags_to_match:", tags_to_match)
+            #print("tags_to_match:", tags_to_match)
 
             # Calculate the nearest recipes
             nearest_recipes = find_nearest_recipes_by_tags_and_id(recipe_id_to_use, self.recipes_df,
@@ -97,16 +97,16 @@ class SustainaMeal:
 
             # Calcola il centroide nutrizionale e trova i tag più comuni
             centroid, common_tags = calculate_centroid_and_find_common_tags(recipe_ids, self.recipes_df,
-                                                                            self.nutrient_vectors_df, self.vectorized)
+                                                                            self.nutrients, self.vectorized)
 
-            print("Centroide nutrizionale:", centroid)
-            print("6 tag più comuni:", common_tags)
+            #print("Centroide nutrizionale:", centroid)
+            #print("6 tag più comuni:", common_tags)
 
             # Filtra i tag per includere solo quelli accettabili
             tags_to_match = [tag for tag in common_tags if tag in acceptable_tags]
             tags_to_match.append('healthy')  # aggiungiamo healthy per cercare ricette più salutari
 
-            print("tags_to_match:", tags_to_match)
+            #print("tags_to_match:", tags_to_match)
 
             nearest_recipes = find_nearest_recipes_by_nutrients_and_tags(centroid, self.recipes_df,
                                                                          self.nutrient_vectors_df, tags_to_match,
