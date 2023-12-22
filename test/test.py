@@ -25,6 +25,8 @@ def test_find_similar_recipes():
 
     print(similar_recipes)
 
+    ordered_recipes=sustainameal.order_recipe_by_healthiness()
+    print(ordered_recipes)
 # Esecuzione del test
 if __name__ == "__main__":
     test_find_similar_recipes()

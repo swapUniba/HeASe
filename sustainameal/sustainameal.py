@@ -5,7 +5,7 @@ from .transformer_embeddings import RecipeTransformer
 from .preprocessing import remove_duplicate_titles, remove_recipes_without_tags
 from .search import find_similar_by_title, find_nearest_recipes_by_tags_and_id ,find_nearest_recipes_by_nutrients_and_tags
 from .utils import calculate_centroid_and_find_common_tags
-
+from .ordering import sort_recipes_by_healthiness_score
 
 class SustainaMeal:
     def __init__(self, recipes_df, ingredients_df, nutrients, transformer_name='davanstrien/autotrain-recipes-2451975973'):
@@ -108,9 +108,12 @@ class SustainaMeal:
 
             #print("tags_to_match:", tags_to_match)
 
-            nearest_recipes = find_nearest_recipes_by_nutrients_and_tags(centroid, self.recipes_df,
+            self.nearest_recipes = find_nearest_recipes_by_nutrients_and_tags(centroid, self.recipes_df,
                                                                          self.nutrient_vectors_df, tags_to_match,
                                                                          match_all_tags=True, n=50,
                                                                          distance_metric='cosine')
 
-        return nearest_recipes
+        return self.nearest_recipes
+
+    def order_recipe_by_healthiness(self, score='who_score'):
+        return sort_recipes_by_healthiness_score(self.nearest_recipes, self.recipes_df, score)
