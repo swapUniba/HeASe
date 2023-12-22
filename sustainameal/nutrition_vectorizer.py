@@ -25,13 +25,12 @@ class NutritionVectorizer:
         normalized_nutrient_data = self.scaler.fit_transform(nutrient_data)
 
         # Create a DataFrame for the normalized nutrient vectors
-        self.nutrient_vectors_df = pd.DataFrame(
-            normalized_nutrient_data,
-            columns=self.nutrients
-        )
-        self.nutrient_vectors_df['recipe_id'] = recipes_df['recipe_id']
+        normalized_df = pd.DataFrame(normalized_nutrient_data, columns=self.nutrients, index=recipes_df.index)
 
-        return self.nutrient_vectors_df
+        # Combine with recipe_id
+        nutrient_vectors_df = pd.concat([recipes_df[['recipe_id']], normalized_df], axis=1)
+
+        return nutrient_vectors_df
 
     def transform(self, recipes_df):
         """
@@ -43,10 +42,11 @@ class NutritionVectorizer:
         nutrient_data = recipes_df[self.nutrients]
         normalized_nutrient_data = self.scaler.transform(nutrient_data)
 
-        nutrient_vectors_df = pd.DataFrame(
-            normalized_nutrient_data,
-            columns=self.nutrients
-        )
-        nutrient_vectors_df['recipe_id'] = recipes_df['recipe_id']
+        # Create a DataFrame for the normalized nutrient vectors
+        normalized_df = pd.DataFrame(normalized_nutrient_data, columns=self.nutrients, index=recipes_df.index)
+
+        # Combine with recipe_id
+        nutrient_vectors_df = pd.concat([recipes_df[['recipe_id']], normalized_df], axis=1)
 
         return nutrient_vectors_df
+

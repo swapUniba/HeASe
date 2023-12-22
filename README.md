@@ -21,7 +21,7 @@ pip install git+https://github.com/GiovTemp/SustainaMeal.git
 ```
 
 ## Usage
-
+Initializes the system by loading the data and preparing the embeddings.
 ```bash
 from sustainameal import SustainaMeal
 
@@ -34,7 +34,9 @@ sm = SustainaMeal(
 ```
 
 ## Find similar recipes 
-Initializes the system by loading the data and preparing the embeddings.
+
+![SustainaMeal Function Architecture](docs/architecture_function.png)
+Use the find_similar_recipes function to get the alternative recipes.
 
         :param recipe_df: Datframe containing the recipes.
         :param ingredients_df: Datframe containing the ingredients for the sustanability computation.

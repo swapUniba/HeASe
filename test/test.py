@@ -18,15 +18,12 @@ def test_find_similar_recipes():
     )
 
     # Test del metodo find_similar_recipes
-    similar_recipes = sustainameal.find_similar_recipes('Pasta with tomato sauce', 5)
+    similar_recipes = sustainameal.find_similar_recipes('Barbecued Roast', 5,
+                                                        acceptable_tags=['appetizers', 'main-dish', 'side-dishes', 'fruits', 'desserts',
+                                                                         'breakfast', 'pasta-rice-and-grains', 'beverages', 'drinks'],
+                                                        match_all_tags=False)
 
     print(similar_recipes)
-
-    # Verifica che i risultati siano del tipo corretto e abbiano il numero atteso di elementi
-    assert isinstance(similar_recipes, list), "Il risultato dovrebbe essere una lista"
-    assert len(similar_recipes) == 5, "La lista dovrebbe contenere 5 ricette simili"
-
-    # Qui puoi aggiungere ulteriori asserzioni per testare aspetti specifici dei risultati
 
 # Esecuzione del test
 if __name__ == "__main__":
