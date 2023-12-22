@@ -110,7 +110,7 @@ class SustainaMeal:
 
             self.nearest_recipes = find_nearest_recipes_by_nutrients_and_tags(centroid, self.recipes_df,
                                                                          self.nutrient_vectors_df, tags_to_match,
-                                                                         match_all_tags=True, n=50,
+                                                                         match_all_tags=True, n=k,
                                                                          distance_metric='cosine')
 
         return self.nearest_recipes
