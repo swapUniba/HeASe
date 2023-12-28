@@ -85,7 +85,8 @@ def find_nearest_recipes_by_tags_and_id(recipe_id, recipes_df, nutrient_vectors_
     filtered_df['similarity'] = similarities
 
     # Sort the filtered recipes by similarity and select the top 'n'
-    nearest_recipes_info = filtered_df.sort_values(by='similarity', ascending=False).head(n)
+    nearest_recipes_info = filtered_df[filtered_df['recipe_id'] != recipe_id].sort_values(by='similarity',
+                                                                                          ascending=False).head(n)
 
     return nearest_recipes_info[['recipe_id', 'title', 'similarity']].to_records(index=False)
 
