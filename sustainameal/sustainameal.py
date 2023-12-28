@@ -2,10 +2,10 @@ import pandas as pd
 
 from .nutrition_vectorizer import NutritionVectorizer
 from .transformer_embeddings import RecipeTransformer
-from .preprocessing import remove_duplicate_titles, remove_recipes_without_tags
+from .preprocessing import remove_duplicate_titles, remove_recipes_without_tags, clean_ingredients_dataframe
 from .search import find_similar_by_title, find_nearest_recipes_by_tags_and_id ,find_nearest_recipes_by_nutrients_and_tags
 from .utils import calculate_centroid_and_find_common_tags
-from .ordering import sort_recipes_by_healthiness_score
+from .ordering import sort_recipes_by_healthiness_score, sort_recipes_by_sustainability_score
 
 class SustainaMeal:
     def __init__(self, recipes_df, ingredients_df, nutrients, transformer_name='davanstrien/autotrain-recipes-2451975973'):
@@ -18,6 +18,9 @@ class SustainaMeal:
         :param transformer_name: Name of the transformer model to use for embeddings.
 
         """
+
+        ingredients_df['Food commodity ITEM'] = clean_ingredients_dataframe(ingredients_df)
+
         # Load the recipes and ingredients data from CSV files
         self.ingredients_df = ingredients_df
 
@@ -117,3 +120,6 @@ class SustainaMeal:
 
     def order_recipe_by_healthiness(self, score='who_score'):
         return sort_recipes_by_healthiness_score(self.nearest_recipes, self.recipes_df, score)
+
+    def order_recipe_by_sustainability(self):
+        return sort_recipes_by_sustainability_score(self.nearest_recipes, self.recipes_df, self.ingredients_df)

@@ -1,1 +1,4 @@
 /test/data/*
+/build/*
+/dist/*
+/SustainaMeal.egg-info/*
