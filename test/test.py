@@ -17,7 +17,8 @@ def test_find_similar_recipes():
         'davanstrien/autotrain-recipes-2451975973'
     )
 
-
+    similar_recipes_by_title = sustainameal.get_similar_by_title('Barbecued Roast', 10)
+    print(similar_recipes_by_title)
     similar_recipes = sustainameal.find_similar_recipes('Barbecued Roast', 10,
                                                         acceptable_tags=['appetizers', 'main-dish', 'side-dishes', 'fruits', 'desserts',
                                                                          'breakfast', 'pasta-rice-and-grains', 'beverages', 'drinks'],
