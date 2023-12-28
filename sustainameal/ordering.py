@@ -99,7 +99,7 @@ def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, ingredi
         recipes_with_sustainability[nearest_recipes_titles[i]] = calculate_ss_recipe(dss, i)
 
     # Ordina il dizionario in base ai valori di sostenibilità (punteggi)
-    sorted_recipes = dict(sorted(recipes_with_sustainability.items(), key=lambda item: item[1]))
+    sorted_recipes = dict(sorted(recipes_with_sustainability.items(), key=lambda item: item[1], reverse=True))
 
     df = pd.DataFrame(list(sorted_recipes.items()), columns=['Recipe', 'Sustainability Score'])
 
