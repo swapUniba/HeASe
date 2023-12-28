@@ -4,6 +4,7 @@ import numpy as np
 import ast
 import pandas as pd
 
+
 def sort_recipes_by_healthiness_score(nearest_recipes_df, recipes_df, score_field):
     """
     Sorts recipes based on a specified score field.
@@ -27,7 +28,7 @@ def sort_recipes_by_healthiness_score(nearest_recipes_df, recipes_df, score_fiel
     sorted_recipes_df = filtered_recipes_df.sort_values(by=score_field, ascending=False)
 
     # Select only relevant columns and the top 10 recipes
-    top_sorted_recipes = sorted_recipes_df[['title', score_field]].head(10)
+    top_sorted_recipes = sorted_recipes_df[['title', score_field]]
 
     # Return the sorted and filtered DataFrame
     return top_sorted_recipes
@@ -79,8 +80,10 @@ def calculate_dss_score_recipe(recipe_index, recipes_df, ingredient_dict):
 
     return sum
 
+
 def calculate_ss_recipe(dss, recipe_index):
-  return (dss[recipe_index] - dss[np.argmin(dss)])/(dss[np.argmax(dss)] - dss[np.argmin(dss)])
+    return (dss[recipe_index] - dss[np.argmin(dss)]) / (dss[np.argmax(dss)] - dss[np.argmin(dss)])
+
 
 def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, ingredients_df):
     dss = []
@@ -101,4 +104,3 @@ def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, ingredi
     df = pd.DataFrame(list(sorted_recipes.items()), columns=['Recipe', 'Sustainability Score'])
 
     return df
-

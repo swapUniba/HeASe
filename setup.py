@@ -18,7 +18,8 @@ setup(
         'transformers',
         'torch',
         'scipy',
-        'tqdm'
+        'tqdm',
+        'nltk'
 
     ],
     classifiers=[

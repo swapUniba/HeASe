@@ -92,7 +92,7 @@ class SustainaMeal:
             #print("tags_to_match:", tags_to_match)
 
             # Calculate the nearest recipes
-            nearest_recipes = find_nearest_recipes_by_tags_and_id(recipe_id_to_use, self.recipes_df,
+            self.nearest_recipes = find_nearest_recipes_by_tags_and_id(recipe_id_to_use, self.recipes_df,
                                                                   self.nutrient_vectors_df, tags_to_match,
                                                                   match_all_tags, n=k, distance_metric='cosine')
         else:
@@ -115,7 +115,6 @@ class SustainaMeal:
                                                                          self.nutrient_vectors_df, tags_to_match,
                                                                          match_all_tags=True, n=k,
                                                                          distance_metric='cosine')
-
         return self.nearest_recipes
 
     def order_recipe_by_healthiness(self, score='who_score'):

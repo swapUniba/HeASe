@@ -4,21 +4,21 @@ from sustainameal import SustainaMeal
 
 def test_find_similar_recipes():
 
-    recipes_df = pd.read_csv("data/recipes.csv")
+    recipes_df = pd.read_csv("data/pp_recipes.csv")
 
     ingredients_df = pd.read_csv("data/cfp_wfp_ingredients.csv", sep=';')
     ingredients_df = ingredients_df.dropna()
 
     # Creazione dell'istanza di SustainaMeal
     sustainameal = SustainaMeal(
-        recipes_df[:100],
+        recipes_df[:1000],
         ingredients_df,
-        ['calories [cal]', 'totalFat [g]', 'protein [g]', 'sodium [mg]', 'saturatedFat [g]', 'sugars [g]'],
+        ['calories [cal]', 'totalFat [g]', 'saturatedFat [g]', 'cholesterol [mg]', 'sodium [mg]', 'dietaryFiber [g]', 'sugars [g]', 'protein [g]'],
         'davanstrien/autotrain-recipes-2451975973'
     )
 
-    # Test del metodo find_similar_recipes
-    similar_recipes = sustainameal.find_similar_recipes('Barbecued Roast', 5,
+
+    similar_recipes = sustainameal.find_similar_recipes('Barbecued Roast', 10,
                                                         acceptable_tags=['appetizers', 'main-dish', 'side-dishes', 'fruits', 'desserts',
                                                                          'breakfast', 'pasta-rice-and-grains', 'beverages', 'drinks'],
                                                         match_all_tags=False)

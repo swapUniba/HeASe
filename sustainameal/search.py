@@ -55,6 +55,7 @@ def find_nearest_recipes_by_tags_and_id(recipe_id, recipes_df, nutrient_vectors_
     Returns:
     list: List of tuples (recipe_id, title, similarity) of the 'n' nearest recipes.
     """
+
     if recipe_id not in nutrient_vectors_df['recipe_id'].values:
         raise ValueError(f"Recipe ID {recipe_id} not found in DataFrame.")
 
@@ -108,7 +109,6 @@ def find_nearest_recipes_by_nutrients_and_tags(nutrient_vector, recipes_df, nutr
     # Ensure that the nutritional vector is in the correct shape (1, number of nutrients)
     if nutrient_vector.ndim == 1:
         nutrient_vector = nutrient_vector.reshape(1, -1)
-
     # Filter recipes based on tags
     if match_all_tags:
         filtered_df = recipes_df[recipes_df['tags'].apply(lambda tags: all(tag in tags for tag in tags_to_match))]
@@ -127,7 +127,7 @@ def find_nearest_recipes_by_nutrients_and_tags(nutrient_vector, recipes_df, nutr
 
     # Add similarity to the filtered DataFrame
     filtered_df['similarity'] = similarities
-    filtered_df = filtered_df.sort_values(by='similarity', ascending=False).head(n)
+    filtered_df = filtered_df.sort_values(by='similarity', ascending=False)[:n]
 
     # Return the information of the nearest recipes
     return filtered_df[['recipe_id', 'title', 'similarity']].to_records(index=False)
