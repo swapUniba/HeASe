@@ -90,17 +90,27 @@ def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, ingredi
     nearest_recipes_titles = nearest_recipes_df['title'].tolist()
     index_list = get_recipes_index(nearest_recipes_titles, recipes_df)
     ingredient_dict = create_dict_ing_cfp_wfp(recipes_df, ingredients_df, index_list)
-    recipes_with_sustainability = {}
+    recipes_with_sustainability = []
 
     for i in range(len(index_list)):
         dss.append(calculate_dss_score_recipe(index_list[i], recipes_df, ingredient_dict))
+        #print(recipes_df.iloc[index_list[i]]['title'])
 
     for i in range(len(nearest_recipes_titles)):
-        recipes_with_sustainability[nearest_recipes_titles[i]] = calculate_ss_recipe(dss, i)
+      recipes_with_sustainability.append((nearest_recipes_titles[i], calculate_ss_recipe(dss, i)))
 
-    # Ordina il dizionario in base ai valori di sostenibilità (punteggi)
-    sorted_recipes = dict(sorted(recipes_with_sustainability.items(), key=lambda item: item[1], reverse=True))
+    recipes_with_sustainability.sort(key=lambda x: x[1])
 
-    df = pd.DataFrame(list(sorted_recipes.items()), columns=['Recipe', 'Sustainability Score'])
+    df = pd.DataFrame(recipes_with_sustainability, columns=['Title', 'Score'])
+
+    return df
+
+    # for i in range(len(nearest_recipes_titles)):
+    #     recipes_with_sustainability[nearest_recipes_titles[i]] = calculate_ss_recipe(dss, i)
+    #
+    # # Ordina il dizionario in base ai valori di sostenibilità (punteggi)
+    # sorted_recipes = dict(sorted(recipes_with_sustainability.items(), key=lambda item: item[1], reverse=True))
+    #
+    # df = pd.DataFrame(list(sorted_recipes.items()), columns=['Recipe', 'Sustainability Score'])
 
     return df
