@@ -30,6 +30,8 @@ stop_words = set(stopwords.words('english'))
 
 # Funzione per rimuovere stopwords e aggettivi dalla colonna 'Food commodity ITEM'
 def remove_stopwords_and_adjectives(text):
+    stop_words = set(stopwords.words('english'))
+
     tokens = wordpunct_tokenize(text)
     tagged_words = pos_tag(tokens)
     filtered_words = [word.replace('*', '') for word, tag in tagged_words if word.lower() not in stop_words and tag not in ['JJ', 'JJR', 'JJS']]

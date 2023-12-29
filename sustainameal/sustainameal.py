@@ -22,6 +22,7 @@ class SustainaMeal:
 
         """
 
+        ingredients_df = ingredients_df.dropna()
         ingredients_df['Food commodity ITEM'] = clean_ingredients_dataframe(ingredients_df)
 
         # Load the recipes and ingredients data from CSV files
