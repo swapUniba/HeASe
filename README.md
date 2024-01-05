@@ -1,6 +1,6 @@
 # SustainaMeal
 
-Colab Demo : [![Demo](https://img.shields.io/badge/Colab-Google_Colab-orange?style=flat&logo=google-colab)](https://colab.research.google.com/path_to_your_notebook)
+Colab Demo : [![Demo](https://img.shields.io/badge/Colab-Google_Colab-orange?style=flat&logo=google-colab)](https://colab.research.google.com/drive/1CrBaq3qkM7sMzpeiNR4_92MjUwxM6UQD?usp=sharing)
 
 ![SustainaMeal Architecture](docs/sustainameal.png)
 

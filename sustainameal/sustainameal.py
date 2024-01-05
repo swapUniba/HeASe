@@ -86,8 +86,7 @@ class SustainaMeal:
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in tags_of_most_similar_recipe if tag in acceptable_tags]
 
-            tags_to_match.append('healthy')  # We add the 'healthy' tag for recovery
-            # print("tags_to_match:", tags_to_match)
+            tags_to_match.append('healthy')  # We add the 'healthy' tag
 
             # Calculate the nearest recipes
             self.nearest_recipes = find_nearest_recipes_by_tags_and_id(recipe_id_to_use, self.recipes_df,
@@ -96,13 +95,13 @@ class SustainaMeal:
         else:
             recipe_ids = [recipe[0] for recipe in similar_recipes_by_title]
 
-            # Calcola il centroide nutrizionale e trova i tag più comuni
+            # Calculate the nutritional centroid and find the most common tags
             centroid, common_tags = calculate_centroid_and_find_common_tags(recipe_ids, self.recipes_df,
                                                                             self.nutrients, self.vectorized)
 
-            # Filtra i tag per includere solo quelli accettabili
+            # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in common_tags if tag in acceptable_tags]
-            tags_to_match.append('healthy')  # aggiungiamo healthy per cercare ricette più salutari
+            tags_to_match.append('healthy')   # We add the 'healthy' tag
 
             self.nearest_recipes = find_nearest_recipes_by_nutrients_and_tags(centroid, self.recipes_df,
                                                                               self.nutrient_vectors_df, tags_to_match,
@@ -120,7 +119,7 @@ class SustainaMeal:
         """
         Order the recipes obtained previously.
 
-        :param (optional) nearest_recipes: Dataframe to order, if none the dataframe computed by find_similar_recipes will be used
+        :param (optional) nearest_recipes: Dataframe to order, if none the dataframe computed by find_similar_recipes will be used.
         :param score: The column name used as the primary sorting criterion.
         :return: A DataFrame of recipes ordered by the specified score.
 
@@ -136,9 +135,9 @@ class SustainaMeal:
         """
         Order the recipes obtained previously.
 
-        :param (optional) nearest_recipes: Dataframe to order , if none the dataframe computed by find_similar_recipes will be used
-        :param score: The input text to find similar recipes for.
-        :param secondary_sort_field:
+        :param (optional) nearest_recipes: Dataframe to order , if none the dataframe computed by find_similar_recipes will be used.
+        :param score: The column name used as the primary sorting criterion.
+        :param secondary_sort_field: The column name used as the secondary sorting criterion.
         :return: A Dataframe with recipes ordered by the given metric.
         """
         if nearest_recipes is not None:
