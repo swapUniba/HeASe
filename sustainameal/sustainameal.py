@@ -10,23 +10,16 @@ from .ordering import sort_recipes_by_healthiness_score, sort_recipes_by_sustain
 
 
 class SustainaMeal:
-    def __init__(self, recipes_df, ingredients_df, nutrients,
+    def __init__(self, recipes_df, nutrients,
                  transformer_name='davanstrien/autotrain-recipes-2451975973'):
         """
         Initializes the system by loading the data and preparing the embeddings.
 
         :param recipe_df: Datframe containing the recipes.
-        :param ingredients_df: Datframe containing the ingredients for the sustanability computation.
         :param nutrients: List of nutrient names to use.
         :param transformer_name: Name of the transformer model to use for embeddings.
 
         """
-
-        ingredients_df = ingredients_df.dropna()
-        ingredients_df['Food commodity ITEM'] = clean_ingredients_dataframe(ingredients_df)
-
-        # Load the recipes and ingredients data from CSV files
-        self.ingredients_df = ingredients_df
 
         # Preprocess recipes dataframe
         recipes_df = remove_duplicate_titles(recipes_df)
@@ -129,5 +122,5 @@ class SustainaMeal:
     def order_recipe_by_healthiness(self, score='who_score'):
         return sort_recipes_by_healthiness_score(self.nearest_recipes, self.recipes_df, score)
 
-    def order_recipe_by_sustainability(self):
-        return sort_recipes_by_sustainability_score(self.nearest_recipes, self.recipes_df, self.ingredients_df)
+    def order_recipe_by_sustainability(self, score='sustainability_score'):
+        return sort_recipes_by_sustainability_score(self.nearest_recipes, self.recipes_df, score)

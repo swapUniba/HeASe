@@ -4,23 +4,19 @@ from sustainameal import SustainaMeal
 
 
 def test_find_similar_recipes():
-    recipes_df = pd.read_csv("data/recipes.csv")
-
-    ingredients_df = pd.read_csv("data/cfp_wfp_ingredients.csv", sep=';')
-    ingredients_df = ingredients_df.dropna()
+    recipes_df = pd.read_csv("data/valid_recipes_dataset.csv")
 
     # Creazione dell'istanza di SustainaMeal
     sustainameal = SustainaMeal(
-        recipes_df[:1000],
-        ingredients_df,
+        recipes_df,
         ['calories [cal]', 'totalFat [g]', 'saturatedFat [g]', 'cholesterol [mg]', 'sodium [mg]', 'dietaryFiber [g]',
          'sugars [g]', 'protein [g]'],
         'davanstrien/autotrain-recipes-2451975973'
     )
 
-    similar_recipes_by_title = sustainameal.get_similar_by_title('Prosciutto & Parmesan Pastry Wheels Recipe', 10)
+    similar_recipes_by_title = sustainameal.get_similar_by_title('Creamy Lemon Asparagus Risotto', 10)
     print(similar_recipes_by_title)
-    similar_recipes = sustainameal.find_similar_recipes('Prosciutto & Parmesan Pastry Wheels Recipe', 10,
+    similar_recipes = sustainameal.find_similar_recipes('Creamy Lemon Asparagus Risotto', 10,
                                                         acceptable_tags=['appetizers', 'main-dish', 'side-dishes',
                                                                          'fruits', 'desserts',
                                                                          'breakfast', 'pasta-rice-and-grains',
