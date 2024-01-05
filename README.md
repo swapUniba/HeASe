@@ -1,5 +1,7 @@
 # SustainaMeal
 
+![SustainaMeal Architecture](docs/sustainameal.png)
+
 ## Introduction
 `SustainaMeal` is a Python library designed to suggest alternative recipes for healthier or more sustainable options. Leveraging machine learning and natural language processing, it compares nutritional profiles and semantic similarities to provide recipe recommendations.
 
@@ -27,7 +29,6 @@ from sustainameal import SustainaMeal
 
 sm = SustainaMeal(
     recipes_df="recipes_df",
-    ingredients_df="ingredients_df",
     nutrients=['calories', 'fat', 'protein', ...],
     transformer_name='your_transformer_model'
 )
@@ -39,7 +40,6 @@ sm = SustainaMeal(
 Use the find_similar_recipes function to get the alternative recipes.
 
         :param recipe_df: Datframe containing the recipes.
-        :param ingredients_df: Datframe containing the ingredients for the sustanability computation.
         :param nutrients: List of nutrient names to use.
         :param transformer_name: Name of the transformer model to use for embeddings. 
 
@@ -56,9 +56,17 @@ score_metric="who_score" #Name of the column of your dataset
 healthier_recipes = sm.order_recipe_by_healthiness(score_metric)
 ```
 
+## Order by sustanability score
+```bash
+score_metric="sustainability_label" #Name of the column of your dataset
+# Default value : sustainability_label
+# Avaliable value in provide dataset : sustainability_label , sustainability_score
+order_by_sus_recipes = sm.order_recipe_by_sustainability(score_metric)
+```
+
 ## Display the recommendations
 ```bash
-for recipe in healthier_recipes:
+for recipe in order_by_sus_recipes:
     print(recipe)
 ```
 
