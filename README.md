@@ -14,6 +14,7 @@ The library consists of several modules:
 - **Transformer Embeddings**: Generates text embeddings for recipe titles using a transformer model.
 - **Nutritional Vector Space**: Maps recipes into a vector space based on nutritional content.
 - **Similarity Search**: Executes cosine similarity searches for finding matching recipes.
+- **Sort results**: Sorts recipes based on healthiness or sustainability metrics.
 
 ![SustainaMeal Architecture](docs/architecture.png)
 
