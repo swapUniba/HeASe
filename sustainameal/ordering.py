@@ -31,18 +31,34 @@ def sort_recipes_by_healthiness_score(nearest_recipes_df, recipes_df, score_fiel
     # Return the sorted and filtered DataFrame
     return top_sorted_recipes
 
-def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, score_field):
+# def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, score_field):
+#     # Ensure the recipe IDs are in the correct format for indexing
+#     recipe_ids = nearest_recipes_df['recipe_id'].tolist()
+#
+#     # Filter the main recipes DataFrame to only include the nearest recipes
+#     filtered_recipes_df = recipes_df[recipes_df['recipe_id'].isin(recipe_ids)]
+#
+#     # Sort the filtered DataFrame based on the score field
+#     sorted_recipes_df = filtered_recipes_df.sort_values(by=score_field, ascending=True)
+#
+#     # Select only relevant columns and the top 10 recipes
+#     top_sorted_recipes = sorted_recipes_df[['title', score_field]]
+#
+#     # Return the sorted and filtered DataFrame
+#     return top_sorted_recipes
+
+def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, score_field, secondary_sort_field='who_score'):
     # Ensure the recipe IDs are in the correct format for indexing
     recipe_ids = nearest_recipes_df['recipe_id'].tolist()
 
     # Filter the main recipes DataFrame to only include the nearest recipes
     filtered_recipes_df = recipes_df[recipes_df['recipe_id'].isin(recipe_ids)]
 
-    # Sort the filtered DataFrame based on the score field
-    sorted_recipes_df = filtered_recipes_df.sort_values(by=score_field, ascending=True)
+    # Sort the filtered DataFrame based on the score field, and then by the secondary_sort_field
+    sorted_recipes_df = filtered_recipes_df.sort_values(by=[score_field, secondary_sort_field], ascending=True)
 
     # Select only relevant columns and the top 10 recipes
-    top_sorted_recipes = sorted_recipes_df[['title', score_field]]
+    top_sorted_recipes = sorted_recipes_df[['title', score_field, secondary_sort_field]]
 
     # Return the sorted and filtered DataFrame
     return top_sorted_recipes

@@ -8,7 +8,7 @@ def test_find_similar_recipes():
 
     # Creazione dell'istanza di SustainaMeal
     sustainameal = SustainaMeal(
-        recipes_df,
+        recipes_df[:1000],
         ['calories [cal]', 'totalFat [g]', 'saturatedFat [g]', 'cholesterol [mg]', 'sodium [mg]', 'dietaryFiber [g]',
          'sugars [g]', 'protein [g]'],
         'davanstrien/autotrain-recipes-2451975973'
