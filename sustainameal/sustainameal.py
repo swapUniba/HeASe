@@ -59,6 +59,7 @@ class SustainaMeal:
         :param input_text: The input text to find similar recipes for.
         :param k: Number of similar recipes to return.
         :param acceptable_tags: List of tags considered acceptable for filtering recipes.
+        :param match_all_tags: Matching strategy
         :return: A list of tuples with similar recipes and their similarity scores.
         """
         # Ensure that the title embeddings have been computed
@@ -99,14 +100,9 @@ class SustainaMeal:
             centroid, common_tags = calculate_centroid_and_find_common_tags(recipe_ids, self.recipes_df,
                                                                             self.nutrients, self.vectorized)
 
-            # print("Centroide nutrizionale:", centroid)
-            # print("6 tag più comuni:", common_tags)
-
             # Filtra i tag per includere solo quelli accettabili
             tags_to_match = [tag for tag in common_tags if tag in acceptable_tags]
             tags_to_match.append('healthy')  # aggiungiamo healthy per cercare ricette più salutari
-
-            # print("tags_to_match:", tags_to_match)
 
             self.nearest_recipes = find_nearest_recipes_by_nutrients_and_tags(centroid, self.recipes_df,
                                                                               self.nutrient_vectors_df, tags_to_match,
@@ -119,8 +115,35 @@ class SustainaMeal:
         return find_similar_by_title(input_text, k, entities_list, self.title_embeddings,
                                      self.transformer)
 
-    def order_recipe_by_healthiness(self, score='who_score'):
-        return sort_recipes_by_healthiness_score(self.nearest_recipes, self.recipes_df, score)
+    def order_recipe_by_healthiness(self, nearest_recipes=None, score='who_score'):
 
-    def order_recipe_by_sustainability(self, score='sustainability_label', secondary_sort_field='who_score'):
-        return sort_recipes_by_sustainability_score(self.nearest_recipes, self.recipes_df, score, secondary_sort_field)
+        """
+        Order the recipes obtained previously.
+
+        :param (optional) nearest_recipes: Dataframe to order, if none the dataframe computed by find_similar_recipes will be used
+        :param score: The column name used as the primary sorting criterion.
+        :return: A DataFrame of recipes ordered by the specified score.
+
+        """
+        if nearest_recipes is not None:
+            return sort_recipes_by_healthiness_score(nearest_recipes, self.recipes_df, score)
+        else:
+            return sort_recipes_by_healthiness_score(self.nearest_recipes, self.recipes_df, score)
+
+    def order_recipe_by_sustainability(self, nearest_recipes=None, score='sustainability_label',
+                                       secondary_sort_field='who_score'):
+
+        """
+        Order the recipes obtained previously.
+
+        :param (optional) nearest_recipes: Dataframe to order , if none the dataframe computed by find_similar_recipes will be used
+        :param score: The input text to find similar recipes for.
+        :param secondary_sort_field:
+        :return: A Dataframe with recipes ordered by the given metric.
+        """
+        if nearest_recipes is not None:
+            return sort_recipes_by_sustainability_score(nearest_recipes, self.recipes_df, score,
+                                                        secondary_sort_field)
+        else:
+            return sort_recipes_by_sustainability_score(self.nearest_recipes, self.recipes_df, score,
+                                                        secondary_sort_field)
