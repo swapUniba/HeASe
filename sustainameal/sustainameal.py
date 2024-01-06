@@ -99,7 +99,7 @@ class SustainaMeal:
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in tags_of_most_similar_recipe if tag in acceptable_tags]
 
-            tags_to_match.append('healthy')  # We add the 'healthy' tag
+            #tags_to_match.append('healthy')  # We add the 'healthy' tag
 
             # Calculate the nearest recipes
             self.nearest_recipes = find_nearest_recipes_by_tags_and_id(recipe_id_to_use, self.recipes_df,
@@ -114,7 +114,7 @@ class SustainaMeal:
 
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in common_tags if tag in acceptable_tags]
-            tags_to_match.append('healthy')   # We add the 'healthy' tag
+            #tags_to_match.append('healthy')   # We add the 'healthy' tag
 
             self.nearest_recipes = find_nearest_recipes_by_nutrients_and_tags(centroid, self.recipes_df,
                                                                               self.nutrient_vectors_df, tags_to_match,
