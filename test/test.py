@@ -14,14 +14,14 @@ def test_find_similar_recipes():
         'davanstrien/autotrain-recipes-2451975973'
     )
 
-    similar_recipes_by_title = sustainameal.get_similar_by_title('Creamy Lemon Asparagus Risotto', 10)
+    similar_recipes_by_title = sustainameal.get_similar_by_title('Survival Necklace', 10)
     print(similar_recipes_by_title)
-    similar_recipes = sustainameal.find_similar_recipes('Creamy Lemon Asparagus Risotto', 10,
+    similar_recipes = sustainameal.find_similar_recipes('Survival Necklace', 10,
                                                         acceptable_tags=['appetizers', 'main-dish', 'side-dishes',
                                                                          'fruits', 'desserts',
                                                                          'breakfast', 'pasta-rice-and-grains',
                                                                          'beverages', 'drinks'],
-                                                        match_all_tags=False)
+                                                        match_all_tags=False, check_sustainability=True)
 
     print(similar_recipes)
 

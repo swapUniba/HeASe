@@ -52,7 +52,7 @@ class SustainaMeal:
         self.vectorized = NutritionVectorizer(self.nutrients)
         self.nutrient_vectors_df = self.vectorized.fit_transform(self.recipes_df)
 
-    def find_similar_recipes(self, input_text, k, acceptable_tags, match_all_tags):
+    def find_similar_recipes(self, input_text, k, acceptable_tags, match_all_tags, check_sustainability=False):
         """
         Finds recipes similar to the given input text.
 
@@ -60,6 +60,7 @@ class SustainaMeal:
         :param k: Number of similar recipes to return.
         :param acceptable_tags: List of tags considered acceptable for filtering recipes.
         :param match_all_tags: Matching strategy
+        :param check_sustainability: check if the desired recipe is sustainable
         :return: A list of tuples with similar recipes and their similarity scores.
         """
         # Ensure that the title embeddings have been computed
@@ -75,7 +76,19 @@ class SustainaMeal:
         (recipe_id_to_use, recipe_title), similarity_score = similar_recipes_by_title[0]
 
         # Proceed only if the similarity score is greater than 0.99 (step 1)
+
         if similarity_score > 0.99:
+
+            if check_sustainability:
+                self.nearest_recipes = self.recipes_df[
+                    (self.recipes_df['title'] == recipe_title) &
+                    (self.recipes_df['sustainability_label'] == 0)
+                ]
+
+                if not self.nearest_recipes.empty:
+                    return self.nearest_recipes
+
+
             # Extract the tags of the corresponding recipe
             tags_of_most_similar_recipe = \
                 self.recipes_df.loc[self.recipes_df['recipe_id'] == recipe_id_to_use, 'tags'].iloc[0]
