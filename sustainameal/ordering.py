@@ -52,7 +52,7 @@ def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, score_f
     filtered_recipes_df = recipes_df[recipes_df['recipe_id'].isin(recipe_ids)]
 
     # Sort the filtered DataFrame based on the score field, and then by the secondary_sort_field
-    sorted_recipes_df = filtered_recipes_df.sort_values(by=[score_field, secondary_sort_field], ascending=True)
+    sorted_recipes_df = filtered_recipes_df.sort_values(by=[score_field, secondary_sort_field], ascending=[True, False])
 
     # Select only relevant columns and the top recipes
     top_sorted_recipes = sorted_recipes_df[['title', score_field, secondary_sort_field]]
