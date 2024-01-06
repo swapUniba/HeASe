@@ -72,6 +72,7 @@ Use the find_similar_recipes function to get the alternative recipes based on ma
         :param acceptable_tags: List of tags considered acceptable for filtering recipes.
         :param match_all_tags: Matching strategy
         :param check_sustainability: check if the desired recipe is already sustainable
+        :param j: number of recipes to consider in the centroid computation 
         :return: A list of tuples with similar recipes and their similarity scores.
         """
 

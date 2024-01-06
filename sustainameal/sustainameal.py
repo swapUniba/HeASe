@@ -52,7 +52,7 @@ class SustainaMeal:
         self.vectorized = NutritionVectorizer(self.nutrients)
         self.nutrient_vectors_df = self.vectorized.fit_transform(self.recipes_df)
 
-    def find_similar_recipes(self, input_text, k, acceptable_tags, match_all_tags, check_sustainability=False):
+    def find_similar_recipes(self, input_text, k, acceptable_tags, match_all_tags, check_sustainability=False, j=5):
         """
         Finds recipes similar to the given input text.
 
@@ -61,6 +61,7 @@ class SustainaMeal:
         :param acceptable_tags: List of tags considered acceptable for filtering recipes.
         :param match_all_tags: Matching strategy
         :param check_sustainability: check if the desired recipe is sustainable
+        :param j: number of recipes to consider in the centroid computation
         :return: A list of tuples with similar recipes and their similarity scores.
         """
         # Ensure that the title embeddings have been computed
@@ -105,7 +106,7 @@ class SustainaMeal:
                                                                        self.nutrient_vectors_df, tags_to_match,
                                                                        match_all_tags, n=k, distance_metric='cosine')
         else:
-            recipe_ids = [recipe[0] for recipe in similar_recipes_by_title]
+            recipe_ids = [recipe[0] for recipe in similar_recipes_by_title[:j]]
 
             # Calculate the nutritional centroid and find the most common tags
             centroid, common_tags = calculate_centroid_and_find_common_tags(recipe_ids, self.recipes_df,
