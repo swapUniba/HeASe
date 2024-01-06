@@ -63,7 +63,7 @@ Default Transformer used [davanstrien/autotrain-recipes-2451975973](https://hugg
 Use the find_similar_recipes function to get the alternative recipes based on macronutrients similarity based on macronutrients similarity (Step 1 & 2 of the Architecture Diagram) .
 
 #### Function Definition :
-    def find_similar_recipes(self, input_text, k, acceptable_tags, match_all_tags):
+    def find_similar_recipes(self, input_text, k, acceptable_tags, match_all_tags,check_sustainability=False):
         """
         Finds recipes similar to the given input text.
 
@@ -71,6 +71,7 @@ Use the find_similar_recipes function to get the alternative recipes based on ma
         :param k: Number of similar recipes to return.
         :param acceptable_tags: List of tags considered acceptable for filtering recipes.
         :param match_all_tags: Matching strategy
+        :param check_sustainability: check if the desired recipe is already sustainable
         :return: A list of tuples with similar recipes and their similarity scores.
         """
 
