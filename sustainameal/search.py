@@ -116,6 +116,8 @@ def find_nearest_recipes_by_nutrients_and_tags(nutrient_vector, recipes_df, nutr
     else:
         filtered_df = recipes_df[recipes_df['tags'].apply(lambda tags: any(tag in tags for tag in tags_to_match))]
 
+    print(f"Number of filtered recipes: {len(filtered_df)}")
+
     if filtered_df.empty:
         print("No recipes match the tag filter criteria.")
         return []

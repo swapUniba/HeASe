@@ -75,7 +75,7 @@ def sort_recipes_by_sustainability_score(input_recipe, nearest_recipes_df, recip
         input_recipe_final_score = a * input_recipe_sus_score + b * input_recipe_heal_score
 
     # Sort the filtered DataFrame based on the score field, and then by the secondary_sort_field
-    sorted_recipes_df = filtered_recipes_df.sort_values(by=[score_field, secondary_sort_field], ascending=True)
+    sorted_recipes_df = filtered_recipes_df.sort_values(by=[score_field, secondary_sort_field], ascending=[True, False])
 
     sorted_recipes_df['percentage_sustainability_increment'] = ((filtered_recipes_df['sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * -100
     sorted_recipes_df['percentage_healthiness_increment'] = ((filtered_recipes_df['who_score'] - input_recipe_heal_score) / input_recipe_heal_score) * -100
