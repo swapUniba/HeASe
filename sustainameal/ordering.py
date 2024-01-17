@@ -61,7 +61,7 @@ def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, score_f
     sorted_recipes_df = filtered_recipes_df.sort_values(by=[score_field, secondary_sort_field], ascending=[True, False])
 
     sorted_recipes_df['sustainability_increment'] = ((filtered_recipes_df[
-                                                          'sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * 100
+                                                          'sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * -100
 
     # Select only relevant columns and the top recipes
     top_sorted_recipes = sorted_recipes_df[['title', score_field, secondary_sort_field, 'sustainability_increment']]
@@ -93,26 +93,34 @@ def sort_recipes_by_sustainameal_score(nearest_recipes_df, recipes_df, input_rec
     filtered_recipes_df = recipes_df[recipes_df['recipe_id'].isin(recipe_ids)]
 
     filtered_recipes_df['sustainameal_score'] = filtered_recipes_df.apply(
-        lambda row: calculate_sustainameal_score(row, alpha, beta), axis=1)
+        lambda row: calculate_sustainameal_score(row['sustainability_score'], row['who_score'], alpha, beta), axis=1)
 
     # Sort the filtered DataFrame based on the score field, and then by the secondary_sort_field
     sorted_recipes_df = filtered_recipes_df.sort_values(by=['sustainameal_score'], ascending=[False])
 
     sorted_recipes_df['sustainability_increment'] = ((filtered_recipes_df[
-                                                          'sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * 100
+                                                          'sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * -100
 
     sorted_recipes_df['healthiness_increment'] = ((filtered_recipes_df[
                                                        'who_score'] - input_recipe_heal_score) / input_recipe_heal_score) * 100
 
+    input_recipe_sustainameal_score = calculate_sustainameal_score(input_recipe_sus_score, input_recipe_heal_score,
+                                                                   alpha, beta)
+    sorted_recipes_df['sustainameal_score_increment'] = ((filtered_recipes_df[
+                                                              'sustainameal_score'] - input_recipe_sustainameal_score) / input_recipe_sustainameal_score) * 100
+
     # Select only relevant columns and the top recipes
     top_sorted_recipes = sorted_recipes_df[
-        ['title', 'who_score', 'healthiness_increment', 'sustainability_score', 'sustainability_increment','sustainameal_score']]
+        ['title',
+         'who_score', 'healthiness_increment',
+         'sustainability_score', 'sustainability_increment',
+         'sustainameal_score', 'sustainameal_score_increment']
+    ]
 
     # Return the sorted and filtered DataFrame
     return top_sorted_recipes
 
 
-def calculate_sustainameal_score(row, alpha, beta):
-
-    sustainameal_score = (1-row['sustainability_score']) * alpha + row['who_score'] * beta
+def calculate_sustainameal_score(sustainability_score, who_score, alpha, beta):
+    sustainameal_score = (1 - sustainability_score) * alpha + who_score * beta
     return sustainameal_score
