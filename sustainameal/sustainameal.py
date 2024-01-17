@@ -100,7 +100,14 @@ class SustainaMeal:
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in tags_of_most_similar_recipe if tag in acceptable_tags]
 
+
             print(f"Tags to match: {tags_to_match}")
+            tags_to_match.append('healthy')
+            if(len(tags_to_match)==0):
+                raise ValueError("No tag found to match.")
+            # Save health score & sus score
+            self.original_scores = self.recipes_df.loc[self.recipes_df['recipe_id'] == recipe_id_to_use]['who_score','sustanability_score']
+            print(self.original_scores)
             # Calculate the nearest recipes
             self.nearest_recipes = find_nearest_recipes_by_tags_and_id(recipe_id_to_use, self.recipes_df,
                                                                        self.nutrient_vectors_df, tags_to_match,
@@ -115,6 +122,9 @@ class SustainaMeal:
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in common_tags if tag in acceptable_tags]
             print(f"Tags to match: {tags_to_match}")
+            tags_to_match.append('healthy')
+            if(len(tags_to_match)==0):
+                raise ValueError("No tag found to match.")
 
             self.nearest_recipes = find_nearest_recipes_by_nutrients_and_tags(centroid, self.recipes_df,
                                                                               self.nutrient_vectors_df, tags_to_match,
@@ -142,7 +152,7 @@ class SustainaMeal:
         else:
             return sort_recipes_by_healthiness_score(self.nearest_recipes, self.recipes_df, score)
 
-    def order_recipe_by_sustainability(self, input_recipe, nearest_recipes=None, score='sustainability_score',
+    def order_recipe_by_sustainability(self, nearest_recipes=None, score='sustainability_score',
                                        secondary_sort_field='sustainability_label'):
 
         """
@@ -155,8 +165,8 @@ class SustainaMeal:
         """
 
         if nearest_recipes is not None:
-            return sort_recipes_by_sustainability_score(input_recipe, nearest_recipes, self.recipes_df, score,
+            return sort_recipes_by_sustainability_score(nearest_recipes, self.recipes_df, score,
                                                         secondary_sort_field)
         else:
-            return sort_recipes_by_sustainability_score(input_recipe, self.nearest_recipes, self.recipes_df, score,
+            return sort_recipes_by_sustainability_score(self.nearest_recipes, self.recipes_df, score,
                                                         secondary_sort_field)
