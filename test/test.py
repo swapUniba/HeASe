@@ -14,9 +14,9 @@ def test_find_similar_recipes():
         'davanstrien/autotrain-recipes-2451975973'
     )
 
-    similar_recipes_by_title = sustainameal.get_similar_by_title('Survival Necklace', 10)
+    similar_recipes_by_title = sustainameal.get_similar_by_title('Roasted Chicken', 10)
     print(similar_recipes_by_title)
-    similar_recipes = sustainameal.find_similar_recipes('Survival Necklace', 10,
+    similar_recipes = sustainameal.find_similar_recipes('Roasted Chicken', 10,
                                                         acceptable_tags=['appetizers', 'main-dish', 'side-dishes',
                                                                          'fruits', 'desserts',
                                                                          'breakfast', 'pasta-rice-and-grains',
@@ -26,10 +26,15 @@ def test_find_similar_recipes():
     print(similar_recipes)
 
     ordered_recipes = sustainameal.order_recipe_by_healthiness()
-    ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
+    ordered_recipes_sus = sustainameal.order_recipe_by_sustainability('Roasted Chicken')
+
+
 
     print(ordered_recipes)
-    print(ordered_recipes_sus)
+    #print(ordered_recipes_sus)
+
+    for index, row in ordered_recipes_sus.iterrows():
+        print(row)
 
 
 # Esecuzione del test

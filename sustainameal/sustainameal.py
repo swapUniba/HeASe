@@ -142,8 +142,8 @@ class SustainaMeal:
         else:
             return sort_recipes_by_healthiness_score(self.nearest_recipes, self.recipes_df, score)
 
-    def order_recipe_by_sustainability(self, nearest_recipes=None, score='sustainability_label',
-                                       secondary_sort_field='who_score'):
+    def order_recipe_by_sustainability(self, input_recipe, nearest_recipes=None, score='sustainability_score',
+                                       secondary_sort_field='sustainability_label'):
 
         """
         Order the recipes obtained previously.
@@ -153,9 +153,10 @@ class SustainaMeal:
         :param secondary_sort_field: The column name used as the secondary sorting criterion.
         :return: A Dataframe with recipes ordered by the given metric.
         """
+
         if nearest_recipes is not None:
-            return sort_recipes_by_sustainability_score(nearest_recipes, self.recipes_df, score,
+            return sort_recipes_by_sustainability_score(input_recipe, nearest_recipes, self.recipes_df, score,
                                                         secondary_sort_field)
         else:
-            return sort_recipes_by_sustainability_score(self.nearest_recipes, self.recipes_df, score,
+            return sort_recipes_by_sustainability_score(input_recipe, self.nearest_recipes, self.recipes_df, score,
                                                         secondary_sort_field)
