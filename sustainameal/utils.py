@@ -2,6 +2,7 @@ from collections import Counter
 import ast
 from sklearn.preprocessing import StandardScaler
 
+
 def calculate_normalized_nutrient_centroid(recipe_indices, recipes_df, nutrients, vectorizer):
     """
     Calculates the normalized nutrient centroid for a set of recipes using the NutritionVectorizer.
@@ -33,8 +34,7 @@ def calculate_normalized_nutrient_centroid(recipe_indices, recipes_df, nutrients
     return centroid_array
 
 
-
-def calculate_centroid_and_find_common_tags(similar_recipes, recipes_df, nutrient_vectors_df, vectorizer):
+def calculate_centroids_and_find_common_tags(similar_recipes, recipes_df, nutrient_vectors_df, vectorizer):
     """
     Calculates the nutritional centroid and finds the most common tags for a set of similar recipes.
 
@@ -65,4 +65,8 @@ def calculate_centroid_and_find_common_tags(similar_recipes, recipes_df, nutrien
     # Count the frequency of each tag and find the 6 most common
     most_common_tags = [tag for tag, count in Counter(all_tags).most_common(6)]
 
-    return centroid, most_common_tags
+    filtered_recipes = recipes_df[recipes_df['recipe_id'].isin(recipe_ids)]
+    mean_who_score = filtered_recipes['who_score'].mean()
+    mean_sustainability_score = filtered_recipes['sustainability_score'].mean()
+
+    return centroid, most_common_tags, mean_who_score, mean_sustainability_score
