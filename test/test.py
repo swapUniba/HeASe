@@ -8,7 +8,7 @@ def test_find_similar_recipes():
 
     # Creazione dell'istanza di SustainaMeal
     sustainameal = SustainaMeal(
-        recipes_df[:1000],
+        recipes_df[:100],
         ['calories [cal]', 'totalFat [g]', 'saturatedFat [g]', 'cholesterol [mg]', 'sodium [mg]', 'dietaryFiber [g]',
          'sugars [g]', 'protein [g]'],
         'davanstrien/autotrain-recipes-2451975973'
@@ -25,11 +25,11 @@ def test_find_similar_recipes():
 
     # print(similar_recipes)
 
-    ordered_recipes = sustainameal.order_recipe_by_healthiness()
-    ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
+    #ordered_recipes = sustainameal.order_recipe_by_healthiness()
+    #ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
+    order_recipes_final = sustainameal.order_recipe_by_sustainameal()
 
-    # print(ordered_recipes)
-    print(ordered_recipes_sus)
+    print(order_recipes_final)
 
 
 # Esecuzione del test

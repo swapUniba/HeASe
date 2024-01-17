@@ -1,12 +1,11 @@
-import pandas as pd
-
 from .nutrition_vectorizer import NutritionVectorizer
 from .transformer_embeddings import RecipeTransformer
 from .preprocessing import remove_duplicate_titles, remove_recipes_without_tags
 from .search import find_similar_by_title, find_nearest_recipes_by_tags_and_id, \
     find_nearest_recipes_by_nutrients_and_tags
-from .utils import calculate_centroid_and_find_common_tags
-from .ordering import sort_recipes_by_healthiness_score, sort_recipes_by_sustainability_score
+from .utils import calculate_centroids_and_find_common_tags
+from .ordering import sort_recipes_by_healthiness_score, sort_recipes_by_sustainability_score, \
+    sort_recipes_by_sustainameal_score
 
 
 class SustainaMeal:
@@ -22,6 +21,8 @@ class SustainaMeal:
         """
 
         # Preprocess recipes dataframe
+
+        self.nearest_recipes = None
         recipes_df = remove_duplicate_titles(recipes_df)
         recipes_df = remove_recipes_without_tags(recipes_df)
 
@@ -36,7 +37,7 @@ class SustainaMeal:
         # Initialize embeddings and nutrient vectors as None before calling setup
         self.title_embeddings = None
         self.nutrient_vectors_df = None
-
+        self.original_scores = None
         # Call the internal method to perform setup tasks
         self._initialize_system()
 
@@ -84,11 +85,10 @@ class SustainaMeal:
                 self.nearest_recipes = self.recipes_df[
                     (self.recipes_df['title'] == recipe_title) &
                     (self.recipes_df['sustainability_label'] == 0)
-                ]
+                    ]
 
                 if not self.nearest_recipes.empty:
                     return self.nearest_recipes
-
 
             # Extract the tags of the corresponding recipe
             tags_of_most_similar_recipe = \
@@ -100,14 +100,15 @@ class SustainaMeal:
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in tags_of_most_similar_recipe if tag in acceptable_tags]
 
-
             print(f"Tags to match: {tags_to_match}")
-            tags_to_match.append('healthy')
-            if(len(tags_to_match)==0):
+            #tags_to_match.append('healthy')
+            if len(tags_to_match) == 0:
                 raise ValueError("No tag found to match.")
             # Save health score & sus score
-            self.original_scores = self.recipes_df.loc[self.recipes_df['recipe_id'] == recipe_id_to_use]['who_score','sustanability_score']
-            print(self.original_scores)
+            self.original_scores = self.recipes_df.loc[
+                self.recipes_df['recipe_id'] == recipe_id_to_use, ['who_score', 'sustainability_score']].to_dict(
+                orient='records')
+
             # Calculate the nearest recipes
             self.nearest_recipes = find_nearest_recipes_by_tags_and_id(recipe_id_to_use, self.recipes_df,
                                                                        self.nutrient_vectors_df, tags_to_match,
@@ -116,14 +117,19 @@ class SustainaMeal:
             recipe_ids = [recipe[0] for recipe in similar_recipes_by_title[:j]]
 
             # Calculate the nutritional centroid and find the most common tags
-            centroid, common_tags = calculate_centroid_and_find_common_tags(recipe_ids, self.recipes_df,
-                                                                            self.nutrients, self.vectorized)
+            centroid, common_tags, mean_who_score, mean_sustainability_score = calculate_centroids_and_find_common_tags(
+                recipe_ids, self.recipes_df,
+                self.nutrients, self.vectorized)
+
+            mean_scores_dict = {'who_score': mean_who_score, 'sustainability_score': mean_sustainability_score}
+
+            self.original_scores = [mean_scores_dict]
 
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in common_tags if tag in acceptable_tags]
             print(f"Tags to match: {tags_to_match}")
-            tags_to_match.append('healthy')
-            if(len(tags_to_match)==0):
+            #tags_to_match.append('healthy')
+            if len(tags_to_match) == 0:
                 raise ValueError("No tag found to match.")
 
             self.nearest_recipes = find_nearest_recipes_by_nutrients_and_tags(centroid, self.recipes_df,
@@ -148,12 +154,14 @@ class SustainaMeal:
 
         """
         if nearest_recipes is not None:
-            return sort_recipes_by_healthiness_score(nearest_recipes, self.recipes_df, score)
+            return sort_recipes_by_healthiness_score(nearest_recipes, self.recipes_df, score,
+                                                     self.original_scores[0]['who_score'])
         else:
-            return sort_recipes_by_healthiness_score(self.nearest_recipes, self.recipes_df, score)
+            return sort_recipes_by_healthiness_score(self.nearest_recipes, self.recipes_df, score,
+                                                     self.original_scores[0]['who_score'])
 
     def order_recipe_by_sustainability(self, nearest_recipes=None, score='sustainability_score',
-                                       secondary_sort_field='sustainability_label'):
+                                       secondary_sort_field='who_score'):
 
         """
         Order the recipes obtained previously.
@@ -166,7 +174,31 @@ class SustainaMeal:
 
         if nearest_recipes is not None:
             return sort_recipes_by_sustainability_score(nearest_recipes, self.recipes_df, score,
-                                                        secondary_sort_field)
+                                                        secondary_sort_field,
+                                                        self.original_scores[0]['sustainability_score'])
         else:
             return sort_recipes_by_sustainability_score(self.nearest_recipes, self.recipes_df, score,
-                                                        secondary_sort_field)
+                                                        secondary_sort_field,
+                                                        self.original_scores[0]['sustainability_score'])
+
+    def order_recipe_by_sustainameal(self, nearest_recipes=None, alpha=0.7, beta=0.3):
+
+        """
+        Order the recipes obtained previously.
+
+
+        :param (optional) nearest_recipes: Dataframe to order , if none the dataframe computed by find_similar_recipes will be used.
+        :return: A Dataframe with recipes ordered by the given metric.
+        :param alpha: weight for sustainability score
+        :param beta: weight for healthiness score
+        """
+
+        if nearest_recipes is not None:
+            return sort_recipes_by_sustainameal_score(nearest_recipes, self.recipes_df,
+                                                      self.original_scores[0]['sustainability_score'],
+                                                      self.original_scores[0]['who_score'],
+                                                      alpha, beta)
+        else:
+            return sort_recipes_by_sustainameal_score(self.nearest_recipes, self.recipes_df,
+                                                      self.original_scores[0]['sustainability_score'],
+                                                      self.original_scores[0]['who_score'], alpha, beta)
