@@ -17,11 +17,10 @@ def sort_recipes_by_healthiness_score(nearest_recipes_df, recipes_df, score_fiel
     pd.DataFrame: A DataFrame of the sorted nearest recipes, including their titles and scores.
     """
 
-    # Ensure the recipe IDs are in the correct format for indexing
-    recipe_ids = nearest_recipes_df['recipe_id'].tolist()
-
-    # Filter the main recipes DataFrame to only include the nearest recipes
+    recipe_ids, recipe_scores = zip(*[(recipe.recipe_id, recipe.similarity) for recipe in nearest_recipes_df])
+    recipe_scores_dict = dict(zip(recipe_ids, recipe_scores))
     filtered_recipes_df = recipes_df[recipes_df['recipe_id'].isin(recipe_ids)]
+    filtered_recipes_df['similarity_score'] = filtered_recipes_df['recipe_id'].map(recipe_scores_dict)
 
     # Sort the filtered DataFrame based on the score field
     sorted_recipes_df = filtered_recipes_df.sort_values(by=score_field, ascending=False)
@@ -29,7 +28,7 @@ def sort_recipes_by_healthiness_score(nearest_recipes_df, recipes_df, score_fiel
                                                        'who_score'] - input_recipe_heal_score) / input_recipe_heal_score) * 100
 
     # Select only relevant columns and the top 10 recipes
-    top_sorted_recipes = sorted_recipes_df[['title', score_field, 'healthiness_increment']]
+    top_sorted_recipes = sorted_recipes_df[['title','similarity_score', score_field, 'healthiness_increment']]
 
     # Return the sorted and filtered DataFrame
     return top_sorted_recipes
@@ -51,11 +50,10 @@ def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, score_f
     pd.DataFrame: A DataFrame of the sorted nearest recipes, including their titles and scores.
     """
 
-    # Ensure the recipe IDs are in the correct format for indexing
-    recipe_ids = nearest_recipes_df['recipe_id'].tolist()
-
-    # Filter the main recipes DataFrame to only include the nearest recipes
+    recipe_ids, recipe_scores = zip(*[(recipe.recipe_id, recipe.similarity) for recipe in nearest_recipes_df])
+    recipe_scores_dict = dict(zip(recipe_ids, recipe_scores))
     filtered_recipes_df = recipes_df[recipes_df['recipe_id'].isin(recipe_ids)]
+    filtered_recipes_df['similarity_score'] = filtered_recipes_df['recipe_id'].map(recipe_scores_dict)
 
     # Sort the filtered DataFrame based on the score field, and then by the secondary_sort_field
     sorted_recipes_df = filtered_recipes_df.sort_values(by=[score_field, secondary_sort_field], ascending=[True, False])
@@ -64,7 +62,8 @@ def sort_recipes_by_sustainability_score(nearest_recipes_df, recipes_df, score_f
                                                           'sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * -100
 
     # Select only relevant columns and the top recipes
-    top_sorted_recipes = sorted_recipes_df[['title', score_field, secondary_sort_field, 'sustainability_increment']]
+    top_sorted_recipes = sorted_recipes_df[
+        ['title', 'similarity_score', score_field, secondary_sort_field, 'sustainability_increment']]
 
     # Return the sorted and filtered DataFrame
     return top_sorted_recipes
@@ -86,11 +85,10 @@ def sort_recipes_by_sustainameal_score(nearest_recipes_df, recipes_df, input_rec
     pd.DataFrame: A DataFrame of the sorted nearest recipes, including their titles and scores.
     """
 
-    # Ensure the recipe IDs are in the correct format for indexing
-    recipe_ids = nearest_recipes_df['recipe_id'].tolist()
-
-    # Filter the main recipes DataFrame to only include the nearest recipes
+    recipe_ids, recipe_scores = zip(*[(recipe.recipe_id, recipe.similarity) for recipe in nearest_recipes_df])
+    recipe_scores_dict = dict(zip(recipe_ids, recipe_scores))
     filtered_recipes_df = recipes_df[recipes_df['recipe_id'].isin(recipe_ids)]
+    filtered_recipes_df['similarity_score'] = filtered_recipes_df['recipe_id'].map(recipe_scores_dict)
 
     filtered_recipes_df['sustainameal_score'] = filtered_recipes_df.apply(
         lambda row: calculate_sustainameal_score(row['sustainability_score'], row['who_score'], alpha, beta), axis=1)
@@ -111,7 +109,7 @@ def sort_recipes_by_sustainameal_score(nearest_recipes_df, recipes_df, input_rec
 
     # Select only relevant columns and the top recipes
     top_sorted_recipes = sorted_recipes_df[
-        ['title',
+        ['title', 'similarity_score',
          'who_score', 'healthiness_increment',
          'sustainability_score', 'sustainability_increment',
          'sustainameal_score', 'sustainameal_score_increment'

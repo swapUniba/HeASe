@@ -23,17 +23,17 @@ def test_find_similar_recipes():
                                                                          'beverages', 'drinks', 'pasta'],
                                                         match_all_tags=False, check_sustainability=False)
 
-    # print(similar_recipes)
+    #print(similar_recipes)
 
     # ordered_recipes = sustainameal.order_recipe_by_healthiness()
     # ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
-    order_recipes_final = sustainameal.order_recipe_by_sustainameal()
+    #order_recipes_final = sustainameal.order_recipe_by_sustainameal()
 
-    sustainameal.setup_key("your_api_key")
-    best_choice_by_llm = sustainameal.choose_best_recipe_with_gpt()
+    #sustainameal.setup_key("your_api_key")
+    #best_choice_by_llm = sustainameal.choose_best_recipe_with_gpt()
 
-    print(order_recipes_final)
-    print(best_choice_by_llm)
+    #print(order_recipes_final)
+    #print(best_choice_by_llm)
 
 
 # Esecuzione del test
