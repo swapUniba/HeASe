@@ -104,7 +104,7 @@ class SustainaMeal:
             tags_to_match = [tag for tag in tags_of_most_similar_recipe if tag in acceptable_tags]
 
             print(f"Tags to match: {tags_to_match}")
-            tags_to_match.append('healthy')
+            #tags_to_match.append('healthy')
             if len(tags_to_match) == 0:
                 raise ValueError("No tag found to match.")
             # Save health score & sus score
@@ -131,7 +131,7 @@ class SustainaMeal:
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in common_tags if tag in acceptable_tags]
             print(f"Tags to match: {tags_to_match}")
-            tags_to_match.append('healthy')
+            #tags_to_match.append('healthy')
             if len(tags_to_match) == 0:
                 raise ValueError("No tag found to match.")
 
