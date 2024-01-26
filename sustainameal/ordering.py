@@ -114,7 +114,8 @@ def sort_recipes_by_sustainameal_score(nearest_recipes_df, recipes_df, input_rec
         ['title',
          'who_score', 'healthiness_increment',
          'sustainability_score', 'sustainability_increment',
-         'sustainameal_score', 'sustainameal_score_increment']
+         'sustainameal_score', 'sustainameal_score_increment'
+         ]
     ]
 
     # Return the sorted and filtered DataFrame

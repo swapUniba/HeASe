@@ -7,6 +7,8 @@ from .utils import calculate_centroids_and_find_common_tags
 from .ordering import sort_recipes_by_healthiness_score, sort_recipes_by_sustainability_score, \
     sort_recipes_by_sustainameal_score
 
+import openai
+
 
 class SustainaMeal:
     def __init__(self, recipes_df, nutrients,
@@ -22,6 +24,7 @@ class SustainaMeal:
 
         # Preprocess recipes dataframe
 
+        self.open_ai_key = None
         self.nearest_recipes = None
         recipes_df = remove_duplicate_titles(recipes_df)
         recipes_df = remove_recipes_without_tags(recipes_df)
@@ -101,7 +104,7 @@ class SustainaMeal:
             tags_to_match = [tag for tag in tags_of_most_similar_recipe if tag in acceptable_tags]
 
             print(f"Tags to match: {tags_to_match}")
-            #tags_to_match.append('healthy')
+            tags_to_match.append('healthy')
             if len(tags_to_match) == 0:
                 raise ValueError("No tag found to match.")
             # Save health score & sus score
@@ -128,7 +131,7 @@ class SustainaMeal:
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in common_tags if tag in acceptable_tags]
             print(f"Tags to match: {tags_to_match}")
-            #tags_to_match.append('healthy')
+            tags_to_match.append('healthy')
             if len(tags_to_match) == 0:
                 raise ValueError("No tag found to match.")
 
@@ -202,3 +205,54 @@ class SustainaMeal:
             return sort_recipes_by_sustainameal_score(self.nearest_recipes, self.recipes_df,
                                                       self.original_scores[0]['sustainability_score'],
                                                       self.original_scores[0]['who_score'], alpha, beta)
+
+    def setup_key(self, open_ai_key):
+        self.open_ai_key = open_ai_key
+
+    def choose_best_recipe_with_gpt(self, nearest_recipes=None, alpha=0.7, beta=0.3):
+        """
+        Use an LLM to choose the best recipe from a list ordered by sustainability and healthiness.
+
+        :param nearest_recipes: Optional DataFrame of recipes to order. If None, use the DataFrame from find_similar_recipes.
+        :param alpha: Weight for sustainability score.
+        :param beta: Weight for healthiness score.
+        :return: The name of the best recipe chosen by GPT-3.5.
+        """
+
+        ordered_recipes = self.order_recipe_by_sustainameal(nearest_recipes, alpha, beta)
+
+        prompt = "Using your knowledge please rank the following recipes from most to least recommended based on a balance of sustainability and healthiness:\n\n"
+        prompt += "\n".join([
+                                f"{idx + 1}. Recipe: {row['title']}"
+                                for idx, row in ordered_recipes.iterrows()])
+        prompt += "\n\nWhich one should I choose? Return just the name"
+
+        # Assicurati di avere la tua chiave API configurata correttamente
+        openai.api_key = self.open_ai_key
+
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=300
+            )
+        except Exception as e:
+            print("Errore nell'invio della richiesta all'API di OpenAI:", e)
+            return None
+
+        # Estrai la scelta migliore dalla risposta
+        response_text = response.choices[0].message['content'].strip()
+
+        # Analizza la risposta per ottenere il nome della ricetta
+        # Assumiamo che il modello risponda con il nome della ricetta dopo "I should choose" o una frase simile.
+        best_recipe_name = None
+        print(response_text)
+        for sentence in response_text.split('\n'):
+            if "recipe:" in sentence.lower():
+                best_recipe_name = sentence.split(":")[1].strip()  # Estrai il nome dopo 'Recipe:'
+                break
+
+        return best_recipe_name

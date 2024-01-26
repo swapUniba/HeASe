@@ -4,7 +4,7 @@ from sustainameal import SustainaMeal
 
 
 def test_find_similar_recipes():
-    recipes_df = pd.read_csv("data/valid_recipes_dataset.csv")
+    recipes_df = pd.read_csv("data/final_recipes_set.csv")
 
     # Creazione dell'istanza di SustainaMeal
     sustainameal = SustainaMeal(
@@ -14,7 +14,7 @@ def test_find_similar_recipes():
         'davanstrien/autotrain-recipes-2451975973'
     )
 
-    similar_recipes_by_title = sustainameal.get_similar_by_title('Cukes and Onions', 10)
+    similar_recipes_by_title = sustainameal.get_similar_by_title('Beef', 10)
     print(similar_recipes_by_title)
     similar_recipes = sustainameal.find_similar_recipes('Cukes and Onions', 10,
                                                         acceptable_tags=['appetizers', 'main-dish', 'side-dishes',
@@ -25,11 +25,15 @@ def test_find_similar_recipes():
 
     # print(similar_recipes)
 
-    #ordered_recipes = sustainameal.order_recipe_by_healthiness()
-    #ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
+    # ordered_recipes = sustainameal.order_recipe_by_healthiness()
+    # ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
     order_recipes_final = sustainameal.order_recipe_by_sustainameal()
 
+    sustainameal.setup_key("your_api_key")
+    best_choice_by_llm = sustainameal.choose_best_recipe_with_gpt()
+
     print(order_recipes_final)
+    print(best_choice_by_llm)
 
 
 # Esecuzione del test

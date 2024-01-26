@@ -19,7 +19,8 @@ setup(
         'torch',
         'scipy',
         'tqdm',
-        'nltk'
+        'nltk',
+        'openai==0.28'
 
     ],
     classifiers=[
