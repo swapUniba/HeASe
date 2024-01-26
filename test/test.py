@@ -14,20 +14,22 @@ def test_find_similar_recipes():
         'davanstrien/autotrain-recipes-2451975973'
     )
 
-    similar_recipes_by_title = sustainameal.get_similar_by_title('Beef', 10)
-    print(similar_recipes_by_title)
-    similar_recipes = sustainameal.find_similar_recipes('Cukes and Onions', 10,
+
+    similar_recipes = sustainameal.find_similar_recipes('Cukes and Onions', 1,
                                                         acceptable_tags=['appetizers', 'main-dish', 'side-dishes',
                                                                          'fruits', 'desserts',
                                                                          'breakfast', 'pasta-rice-and-grains',
                                                                          'beverages', 'drinks', 'pasta'],
                                                         match_all_tags=False, check_sustainability=False)
 
-    #print(similar_recipes)
+    print(similar_recipes)
 
-    # ordered_recipes = sustainameal.order_recipe_by_healthiness()
-    # ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
+    #ordered_recipes = sustainameal.order_recipe_by_healthiness()
+    #print(ordered_recipes)
+    #ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
+    #print(ordered_recipes_sus)
     #order_recipes_final = sustainameal.order_recipe_by_sustainameal()
+    #print(order_recipes_final)
 
     #sustainameal.setup_key("your_api_key")
     #best_choice_by_llm = sustainameal.choose_best_recipe_with_gpt()
