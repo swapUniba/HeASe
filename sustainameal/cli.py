@@ -7,16 +7,17 @@ def init_sustainameal(args):
         sm = SustainaMeal(
             None,  # Nessun DataFrame necessario in questo caso
             args.nutrients,
+            True,
             args.model_name,
-            load=True
+
         )
     else:
         recipes_df = pd.read_csv(args.recipes_csv)
         sm = SustainaMeal(
             recipes_df,
             args.nutrients,
+            False,
             args.model_name,
-            load=False
         )
     return sm
 
