@@ -20,8 +20,7 @@ setup(
         'scipy',
         'tqdm',
         'nltk',
-        'openai==0.28',
-        'pickle'
+        'openai==0.28'
 
     ],
     classifiers=[
