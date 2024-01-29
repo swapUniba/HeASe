@@ -32,7 +32,7 @@ def test_find_similar_recipes():
     order_recipes_final = sustainameal.order_recipe_by_sustainameal()
     #print(order_recipes_final)
 
-    #sustainameal.setup_openai_key("open-ai-key)
+    #sustainameal.setup_openai_key("open-ai-key")
     #best_choice_by_llm = sustainameal.choose_best_recipe_with_gpt()
     #print(sustainameal.original_scores[0]['who_score'])
 

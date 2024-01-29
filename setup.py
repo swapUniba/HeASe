@@ -20,7 +20,8 @@ setup(
         'scipy',
         'tqdm',
         'nltk',
-        'openai==0.28'
+        'openai==0.28',
+        'pickle'
 
     ],
     classifiers=[
@@ -34,7 +35,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'my-command=SustainaMeal.module:main_function',
+            'sustainameal=cli:main',
         ],
     },
 )
