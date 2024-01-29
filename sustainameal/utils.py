@@ -1,4 +1,7 @@
 from collections import Counter
+import pickle
+import os
+import pandas as pd
 import ast
 from sklearn.preprocessing import StandardScaler
 
@@ -70,3 +73,29 @@ def calculate_centroids_and_find_common_tags(similar_recipes, recipes_df, nutrie
     mean_sustainability_score = filtered_recipes['sustainability_score'].mean()
 
     return centroid, most_common_tags, mean_who_score, mean_sustainability_score
+
+
+def save_data(obj, filename):
+    # Crea la directory se non esiste
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    with open(filename, 'wb') as file:
+        pickle.dump(obj, file)
+
+
+def load_data(filename):
+    if os.path.exists(filename):
+        with open(filename, 'rb') as file:
+            return pickle.load(file)
+    return None
+
+
+def save_dataframe(df, filename):
+    # Crea la directory se non esiste
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    df.to_pickle(filename)
+
+
+def load_dataframe(filename):
+    if os.path.exists(filename):
+        return pd.read_pickle(filename)
+    return None

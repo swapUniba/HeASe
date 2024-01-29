@@ -11,6 +11,7 @@ def test_find_similar_recipes():
         recipes_df[:100],
         ['calories [cal]', 'totalFat [g]', 'saturatedFat [g]', 'cholesterol [mg]', 'sodium [mg]', 'dietaryFiber [g]',
          'sugars [g]', 'protein [g]'],
+        True,
         'davanstrien/autotrain-recipes-2451975973'
     )
 
@@ -28,11 +29,12 @@ def test_find_similar_recipes():
     #print(ordered_recipes)
     #ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
     #print(ordered_recipes_sus)
-    #order_recipes_final = sustainameal.order_recipe_by_sustainameal()
+    order_recipes_final = sustainameal.order_recipe_by_sustainameal()
     #print(order_recipes_final)
 
-    #sustainameal.setup_key("your_api_key")
+    #sustainameal.setup_openai_key("open-ai-key)
     #best_choice_by_llm = sustainameal.choose_best_recipe_with_gpt()
+    #print(sustainameal.original_scores[0]['who_score'])
 
     #print(order_recipes_final)
     #print(best_choice_by_llm)

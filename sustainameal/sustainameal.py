@@ -3,15 +3,18 @@ from .transformer_embeddings import RecipeTransformer
 from .preprocessing import remove_duplicate_titles, remove_recipes_without_tags
 from .search import find_similar_by_title, find_nearest_recipes_by_tags_and_id, \
     find_nearest_recipes_by_nutrients_and_tags
-from .utils import calculate_centroids_and_find_common_tags
+from .utils import calculate_centroids_and_find_common_tags, save_data, load_data, save_dataframe, load_dataframe
 from .ordering import sort_recipes_by_healthiness_score, sort_recipes_by_sustainability_score, \
     sort_recipes_by_sustainameal_score
 
 import openai
+import pandas as pd
+import os
+import pickle
 
 
 class SustainaMeal:
-    def __init__(self, recipes_df, nutrients,
+    def __init__(self, recipes_df, nutrients, load=False,
                  transformer_name='davanstrien/autotrain-recipes-2451975973'):
         """
         Initializes the system by loading the data and preparing the embeddings.
@@ -26,10 +29,6 @@ class SustainaMeal:
 
         self.open_ai_key = None
         self.nearest_recipes = None
-        recipes_df = remove_duplicate_titles(recipes_df)
-        recipes_df = remove_recipes_without_tags(recipes_df)
-
-        self.recipes_df = recipes_df
 
         # Create an instance of RecipeTransformer
         self.transformer = RecipeTransformer(transformer_name)
@@ -41,20 +40,55 @@ class SustainaMeal:
         self.title_embeddings = None
         self.nutrient_vectors_df = None
         self.original_scores = None
+
+        if load:
+            self._load_saved_data()
+        else:
+            self._process_and_save_data(recipes_df)
+
         # Call the internal method to perform setup tasks
         self._initialize_system()
+
+    def _load_saved_data(self):
+        if os.path.exists('stored_data/processed_recipes_df.pkl'):
+            self.recipes_df = pd.read_pickle('stored_data/processed_recipes_df.pkl')
+        else:
+            raise FileNotFoundError("Processed recipes DataFrame not found.")
+
+        if os.path.exists('stored_data/title_embeddings.pkl'):
+            with open('stored_data/title_embeddings.pkl', 'rb') as f:
+                self.title_embeddings = pickle.load(f)
+        else:
+            raise FileNotFoundError("Title embeddings not found.")
+
+        with open('stored_data/vectorized.pkl', 'rb') as f:
+            self.vectorized = pickle.load(f)
+            self.nutrient_vectors_df = self.vectorized.fit_transform(self.recipes_df)
+
+    def _process_and_save_data(self, recipes_df):
+        recipes_df = remove_duplicate_titles(recipes_df)
+        recipes_df = remove_recipes_without_tags(recipes_df)
+        self.recipes_df = recipes_df
+        save_dataframe(self.recipes_df, 'stored_data/processed_recipes_df.pkl')
+
 
     def _initialize_system(self):
         """
         Private method to initialize the embeddings and the vector space for the recipes.
         """
-        # Process the titles through the transformer to get embeddings
-        titles = self.recipes_df['title'].tolist()
-        self.title_embeddings = self.transformer.process_batch(titles)
 
-        # Initialize and fit the NutritionVectorizer and transform the nutrient data
-        self.vectorized = NutritionVectorizer(self.nutrients)
-        self.nutrient_vectors_df = self.vectorized.fit_transform(self.recipes_df)
+        # Processa i titoli tramite il transformer per ottenere le embedding solo se non sono già stati caricati
+        if self.title_embeddings is None:
+            titles = self.recipes_df['title'].tolist()
+            self.title_embeddings = self.transformer.process_batch(titles)
+            save_data(self.title_embeddings, 'stored_data/title_embeddings.pkl')
+
+        # Inizializza e adatta il NutritionVectorizer e trasforma i dati sui nutrienti solo se non sono già stati caricati
+        if self.nutrient_vectors_df is None:
+            self.vectorized = NutritionVectorizer(self.nutrients)
+            with open('stored_data/vectorized.pkl', 'wb') as f:
+                pickle.dump(self.vectorized, f)
+            self.nutrient_vectors_df = self.vectorized.fit_transform(self.recipes_df)
 
     def find_similar_recipes(self, input_text, k, acceptable_tags, match_all_tags, check_sustainability=False, j=5):
         """
@@ -104,7 +138,7 @@ class SustainaMeal:
             tags_to_match = [tag for tag in tags_of_most_similar_recipe if tag in acceptable_tags]
 
             print(f"Tags to match: {tags_to_match}")
-            #tags_to_match.append('healthy')
+            # tags_to_match.append('healthy')
             if len(tags_to_match) == 0:
                 raise ValueError("No tag found to match.")
             # Save health score & sus score
@@ -131,7 +165,7 @@ class SustainaMeal:
             # Filter tags to include only those that are acceptable
             tags_to_match = [tag for tag in common_tags if tag in acceptable_tags]
             print(f"Tags to match: {tags_to_match}")
-            #tags_to_match.append('healthy')
+            # tags_to_match.append('healthy')
             if len(tags_to_match) == 0:
                 raise ValueError("No tag found to match.")
 
@@ -206,7 +240,7 @@ class SustainaMeal:
                                                       self.original_scores[0]['sustainability_score'],
                                                       self.original_scores[0]['who_score'], alpha, beta)
 
-    def setup_key(self, open_ai_key):
+    def setup_openai_key(self, open_ai_key):
         self.open_ai_key = open_ai_key
 
     def choose_best_recipe_with_gpt(self, nearest_recipes=None, alpha=0.7, beta=0.3):
@@ -221,10 +255,15 @@ class SustainaMeal:
 
         ordered_recipes = self.order_recipe_by_sustainameal(nearest_recipes, alpha, beta)
 
+        # Verifica se il DataFrame 'ordered_recipes' è vuoto prima di procedere
+        if ordered_recipes.empty:
+            print("No recipes to order. Please provide a non-empty DataFrame.")
+            return None
+
         prompt = "Using your knowledge please rank the following recipes from most to least recommended based on a balance of sustainability and healthiness:\n\n"
         prompt += "\n".join([
-                                f"{idx + 1}. Recipe: {row['title']}"
-                                for idx, row in ordered_recipes.iterrows()])
+            f"{idx + 1}. Recipe: {row['title']}"
+            for idx, row in ordered_recipes.iterrows()])
         prompt += "\n\nWhich one should I choose? Return just the name"
 
         # Assicurati di avere la tua chiave API configurata correttamente
