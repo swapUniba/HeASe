@@ -2,6 +2,7 @@ import argparse
 from sustainameal import SustainaMeal
 import pandas as pd
 
+
 def init_sustainameal(args):
     if args.load:
         sm = SustainaMeal(
@@ -21,27 +22,38 @@ def init_sustainameal(args):
         )
     return sm
 
+
 def find_similar(args, sm):
-    return sm.find_similar_recipes(args.recipe_name, args.k, args.acceptable_tags, args.match_all_tags, args.check_sustainability)
+    return sm.find_similar_recipes(args.recipe_name, args.k, args.acceptable_tags, args.match_all_tags,
+                                   args.check_sustainability)
+
 
 def get_similar_by_title(args, sm):
     return sm.get_similar_by_title(args.input_text, args.k)
 
+
 def order_by_healthiness(args, sm):
     return sm.order_recipe_by_healthiness(score=args.score)
+
 
 def order_by_sustainability(args, sm):
     return sm.order_recipe_by_sustainability(score=args.score, secondary_sort_field=args.secondary_sort_field)
 
+
 def order_by_sustainameal(args, sm):
     return sm.order_recipe_by_sustainameal(alpha=args.alpha, beta=args.beta)
+
 
 def main():
     parser = argparse.ArgumentParser(description="SustainaMeal Command Line Interface")
     parser.add_argument("--load", action="store_true", help="Load processed data from saved files")
     parser.add_argument("--recipes_csv", help="Path to the CSV file containing the recipes", default=None)
-    parser.add_argument("--nutrients", nargs='+', help="List of nutrients to consider")
-    parser.add_argument("--model_name", help="Name of the model for embeddings")
+    parser.add_argument("--nutrients",
+                        default=['calories [cal]', 'totalFat [g]', 'saturatedFat [g]', 'cholesterol [mg]',
+                                 'sodium [mg]', 'dietaryFiber [g]',
+                                 'sugars [g]', 'protein [g]'], nargs='+', help="List of nutrients to consider")
+    parser.add_argument("--model_name", default="davanstrien/autotrain-recipes-2451975973",
+                        help="Name of the model for embeddings")
 
     subparsers = parser.add_subparsers(dest='command', help='sub-command help')
 
@@ -49,9 +61,16 @@ def main():
     parser_find_similar = subparsers.add_parser('find_similar', help='Find similar recipes')
     parser_find_similar.add_argument("recipe_name", help="Name of the recipe to find similar ones for")
     parser_find_similar.add_argument("--k", type=int, default=1, help="Number of similar recipes to find")
-    parser_find_similar.add_argument("--acceptable_tags", nargs='+', help="List of acceptable tags for filtering recipes")
+    parser_find_similar.add_argument("--acceptable_tags",
+                                     default=['appetizers', 'main-dish', 'side-dishes',
+                                                                         'fruits', 'desserts',
+                                                                         'breakfast', 'pasta-rice-and-grains',
+                                                                         'beverages', 'drinks', 'pasta'],
+                                     nargs='+',
+                                     help="List of acceptable tags for filtering recipes")
     parser_find_similar.add_argument("--match_all_tags", type=bool, default=False, help="Whether to match all tags")
-    parser_find_similar.add_argument("--check_sustainability", type=bool, default=False, help="Whether to check sustainability score")
+    parser_find_similar.add_argument("--check_sustainability", type=bool, default=False,
+                                     help="Whether to check sustainability score")
 
     # Subparser for order_by_healthiness
     parser_healthiness = subparsers.add_parser('order_by_healthiness', help='Order recipes by healthiness')
@@ -59,7 +78,8 @@ def main():
 
     # Subparser for order_by_sustainability
     parser_sustainability = subparsers.add_parser('order_by_sustainability', help='Order recipes by sustainability')
-    parser_sustainability.add_argument("--score", default='sustainability_score', help="Sustainability score to use for ordering")
+    parser_sustainability.add_argument("--score", default='sustainability_score',
+                                       help="Sustainability score to use for ordering")
     parser_sustainability.add_argument("--secondary_sort_field", default='who_score', help="Secondary sorting field")
 
     # Subparser for order_by_sustainameal
@@ -85,6 +105,7 @@ def main():
         else:
             parser.print_help()
             return
+
 
 if __name__ == "__main__":
     main()

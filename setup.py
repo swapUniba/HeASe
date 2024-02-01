@@ -20,7 +20,9 @@ setup(
         'scipy',
         'tqdm',
         'nltk',
-        'openai==0.28'
+        'openai==0.28',
+        'langchain',
+        'pydantic'
 
     ],
     classifiers=[

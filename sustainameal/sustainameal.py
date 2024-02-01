@@ -1,3 +1,4 @@
+from .agent import Agent, AlternativeSustainableRecipeTool
 from .nutrition_vectorizer import NutritionVectorizer
 from .transformer_embeddings import RecipeTransformer
 from .preprocessing import remove_duplicate_titles, remove_recipes_without_tags
@@ -27,6 +28,7 @@ class SustainaMeal:
 
         # Preprocess recipes dataframe
 
+        self.agent = None
         self.open_ai_key = None
         self.nearest_recipes = None
 
@@ -70,7 +72,6 @@ class SustainaMeal:
         recipes_df = remove_recipes_without_tags(recipes_df)
         self.recipes_df = recipes_df
         save_dataframe(self.recipes_df, 'stored_data/processed_recipes_df.pkl')
-
 
     def _initialize_system(self):
         """
@@ -260,7 +261,7 @@ class SustainaMeal:
             print("No recipes to order. Please provide a non-empty DataFrame.")
             return None
 
-        prompt = "Using your knowledge please rank the following recipes from most to least recommended based on a balance of sustainability and healthiness:\n\n"
+        prompt = "Using your knowledge please rank (if necessary) the following recipes from most to least recommended based on a balance of sustainability and healthiness:\n\n"
         prompt += "\n".join([
             f"{idx + 1}. Recipe: {row['title']}"
             for idx, row in ordered_recipes.iterrows()])
@@ -295,3 +296,22 @@ class SustainaMeal:
                 break
 
         return best_recipe_name
+
+    def create_agent(self):
+        tools = [AlternativeSustainableRecipeTool(get_alternative_recipe_func=self.alternative_recipe)]
+        self.agent = Agent(tools, self.open_ai_key)
+
+    def agent_ask(self, text):
+        return self.agent.ask(text)
+
+    def alternative_recipe(self, input_recipe):
+        print(input_recipe)
+        self.find_similar_recipes(input_recipe, 10,
+                                  acceptable_tags=['appetizers', 'main-dish', 'side-dishes', 'drinks', 'beverages',
+                                                   'fruits', 'desserts',
+                                                   'breakfast', 'pasta-rice-and-grains', 'rice', 'pasta', 'pizza',
+                                                   'breads', 'meat', 'fish',
+                                                   'seafood', 'beef', 'chicken', 'vegetarian'],
+                                  match_all_tags=False, check_sustainability=False)
+
+        return self.choose_best_recipe_with_gpt()
