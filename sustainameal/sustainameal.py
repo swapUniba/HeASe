@@ -262,7 +262,7 @@ class SustainaMeal:
             print("No recipes to order. Please provide a non-empty DataFrame.")
             return None
 
-        if prompt.empty:
+        if prompt is not None:
             prompt = "Using your knowledge please rank (if necessary) the following recipes from most to least recommended based on a balance of sustainability and healthiness:\n\n"
         prompt += "\n".join([
             f"{idx + 1}. Recipe: {row['title']}"
