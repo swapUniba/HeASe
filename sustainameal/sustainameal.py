@@ -244,10 +244,11 @@ class SustainaMeal:
     def setup_openai_key(self, open_ai_key):
         self.open_ai_key = open_ai_key
 
-    def choose_best_recipe_with_gpt(self, nearest_recipes=None, alpha=0.7, beta=0.3):
+    def choose_best_recipe_with_gpt(self, prompt=None, nearest_recipes=None, alpha=0.7, beta=0.3):
         """
         Use an LLM to choose the best recipe from a list ordered by sustainability and healthiness.
 
+        :param prompt: Custom prompt to override the first section of the prompt
         :param nearest_recipes: Optional DataFrame of recipes to order. If None, use the DataFrame from find_similar_recipes.
         :param alpha: Weight for sustainability score.
         :param beta: Weight for healthiness score.
@@ -261,7 +262,8 @@ class SustainaMeal:
             print("No recipes to order. Please provide a non-empty DataFrame.")
             return None
 
-        prompt = "Using your knowledge please rank (if necessary) the following recipes from most to least recommended based on a balance of sustainability and healthiness:\n\n"
+        if prompt.empty:
+            prompt = "Using your knowledge please rank (if necessary) the following recipes from most to least recommended based on a balance of sustainability and healthiness:\n\n"
         prompt += "\n".join([
             f"{idx + 1}. Recipe: {row['title']}"
             for idx, row in ordered_recipes.iterrows()])
