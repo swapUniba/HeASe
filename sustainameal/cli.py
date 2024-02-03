@@ -28,11 +28,8 @@ def find_similar(args, sm):
                                    args.check_sustainability)
 
 
-def get_similar_by_title(args, sm):
-    return sm.get_similar_by_title(args.input_text, args.k)
-
-
 def order_by_healthiness(args, sm):
+    sm.find_similar_recipes()
     return sm.order_recipe_by_healthiness(score=args.score)
 
 
@@ -94,17 +91,22 @@ def main():
 
         if args.command == 'find_similar':
             result = find_similar(args, sm)
-        elif args.command == 'get_similar_by_title':
-            result = get_similar_by_title(args, sm)
+
         elif args.command == 'order_by_healthiness':
             result = order_by_healthiness(args, sm)
+
         elif args.command == 'order_by_sustainability':
             result = order_by_sustainability(args, sm)
+
         elif args.command == 'order_by_sustainameal':
             result = order_by_sustainameal(args, sm)
+
         else:
             parser.print_help()
             return
+
+        # Stampa i risultati
+        print(result)
 
 
 if __name__ == "__main__":
