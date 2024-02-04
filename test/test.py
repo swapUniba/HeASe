@@ -15,7 +15,7 @@ def test_find_similar_recipes():
         'davanstrien/autotrain-recipes-2451975973'
     )
 
-    similar_recipes = sustainameal.find_similar_recipes('Pasta alla carbonara', 10,
+    similar_recipes = sustainameal.find_similar_recipes('Boiled Radishes', 10,
                                                         acceptable_tags=['appetizers', 'main-dish', 'side-dishes',
                                                                          'drinks', 'beverages', 'fruits', 'desserts',
                                                                          'breakfast', 'pasta-rice-and-grains', 'rice',
