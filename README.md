@@ -174,8 +174,6 @@ Make sure you have Python and the required dependencies installed. You can insta
 
 ```bash
 pip install -r requirements.txt
-
-    print(recipe)
 ```
 ## Available Commands
 ### Load Processed Data
