@@ -162,7 +162,71 @@ order_by_sus_recipes = sm.order_recipe_by_sustainability(
 ## Display the recommendations
 ```bash
 for recipe in order_by_sus_recipes:
-    print(recipe)
 ```
 
+## SustainaMeal Command Line Interface (CLI) Guide
 
+## Overview
+The SustainaMeal Command Line Interface (CLI) provides an interface to perform various operations on your SustainaMeal library. Below are the different operations available and how to use them.
+
+## Prerequisites
+Make sure you have Python and the required dependencies installed. You can install dependencies by running:
+
+```bash
+pip install -r requirements.txt
+
+    print(recipe)
+```
+## Available Commands
+### Load Processed Data
+```bash
+sustainameal --load
+```
+This command loads processed data from previously saved files.
+
+### Load Data from CSV
+```bash
+sustainameal --recipes_csv path/to/your/file.csv
+```
+This command loads data from a CSV file containing recipes.
+
+### Find Similar Recipes
+```bash
+sustainameal find_similar RECIPE_NAME --k 5 --acceptable_tags tag1 tag2 --match_all_tags --check_sustainability
+```
+Find recipes similar to the specified one, with options to limit results based on tags, match all tags, and check sustainability.
+
+### Order by Healthiness
+```bash
+sustainameal order_by_healthiness RECIPE_NAME --k 5 --acceptable_tags tag1 tag2 --match_all_tags --check_sustainability --score who_score
+```
+Order recipes by healthiness using a specific score.
+
+### Order by Sustainability
+```bash
+sustainameal order_by_sustainability RECIPE_NAME --k 5 --acceptable_tags tag1 tag2 --match_all_tags --check_sustainability --score sustainability_score --secondary_sort_field who_score
+```
+Order recipes by sustainability using a specific primary score and a secondary sort field.
+
+### Order by SustainaMeal Score
+```bash
+sustainameal order_by_sustainameal RECIPE_NAME --k 5 --acceptable_tags tag1 tag2 --match_all_tags --check_sustainability --alpha 0.7 --beta 0.3
+```
+Order recipes using the SustainaMeal score with specific weights for sustainability and healthiness.
+
+### Examples
+
+#### Example 1: Load processed data
+```bash
+sustainameal --load
+```
+
+#### Example 2: Find similar recipes
+```bash
+sustainameal find_similar "Pasta with Tomato" --k 5 --acceptable_tags main-dish --check_sustainability
+```
+
+#### Example 3: Order by sustainability
+```bash
+sustainameal order_by_sustainability "Quinoa Salad" --k 5 --acceptable_tags side-dishes --check_sustainability --score sustainability_score --secondary_sort_field who_score
+```
