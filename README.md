@@ -31,7 +31,7 @@ Initializes the system by loading the data and preparing the embeddings.
 
 #### Class Definition :
 
-    def __init__(self, recipes_df, nutrients,
+    def __init__(self, recipes_df, nutrients, load=False,
                  transformer_name='davanstrien/autotrain-recipes-2451975973'):
         """
         Initializes the system by loading the data and preparing the embeddings.
@@ -50,6 +50,7 @@ from sustainameal import SustainaMeal
 
 sm = SustainaMeal(
     recipes_df="recipes_df",
+    load=False,
     nutrients=['calories', 'fat', 'protein', ...],
     transformer_name='your_transformer_model'
 ) 
@@ -63,7 +64,7 @@ Default Transformer used [davanstrien/autotrain-recipes-2451975973](https://hugg
 Use the find_similar_recipes function to get the alternative recipes based on macronutrients similarity based on macronutrients similarity (Step 1 & 2 of the Architecture Diagram) .
 
 #### Function Definition :
-    def find_similar_recipes(self, input_text, k, acceptable_tags, match_all_tags,check_sustainability=False):
+    def find_similar_recipes(self, input_text, k, acceptable_tags, match_all_tags, check_sustainability=False, j=5):
         """
         Finds recipes similar to the given input text.
 
@@ -158,6 +159,32 @@ order_by_sus_recipes = sm.order_recipe_by_sustainability(
                                                   )
 ```
 
+### Order by sustainameal score
+Use the order_recipe_by_sustainameal to sort the recipes.
+
+#### Function Definition :
+    def order_recipe_by_sustainameal(self, nearest_recipes=None, alpha=0.7, beta=0.3):
+
+        """
+        Order the recipes obtained previously.
+
+
+        :param (optional) nearest_recipes: Dataframe to order , if none the dataframe computed by find_similar_recipes will be used.
+        :return: A Dataframe with recipes ordered by the given metric.
+        :param alpha: weight for sustainability score
+        :param beta: weight for healthiness score
+        """
+#### Usage
+- Sorts the DataFrame produced by 'find_similar_recipes', assuming it has been executed before.
+```bash
+order_by_sus_recipes = sm.order_recipe_by_sustainameal()
+```
+
+- Sort a different dataframe than the one computed by 'find_similar_recipes' (for example is useful for reordering a subset of the previous dataframe )
+```bash
+order_by_sus_recipes = sm.order_recipe_by_sustainability(
+                                                    nearest_recipes=your_df)
+```
 
 ## Display the recommendations
 ```bash
@@ -169,12 +196,6 @@ for recipe in order_by_sus_recipes:
 ## Overview
 The SustainaMeal Command Line Interface (CLI) provides an interface to perform various operations on your SustainaMeal library. Below are the different operations available and how to use them.
 
-## Prerequisites
-Make sure you have Python and the required dependencies installed. You can install dependencies by running:
-
-```bash
-pip install -r requirements.txt
-```
 ## Available Commands
 ### Load Processed Data
 ```bash
