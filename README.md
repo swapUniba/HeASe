@@ -182,7 +182,7 @@ order_by_sus_recipes = sm.order_recipe_by_sustainameal()
 
 - Sort a different dataframe than the one computed by 'find_similar_recipes' (for example is useful for reordering a subset of the previous dataframe )
 ```bash
-order_by_sus_recipes = sm.order_recipe_by_sustainability(
+order_by_sus_recipes = sm.order_recipe_by_sustainameal(
                                                     nearest_recipes=your_df)
 ```
 
