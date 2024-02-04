@@ -13,6 +13,9 @@ import pandas as pd
 import os
 import pickle
 
+import warnings
+pd.options.mode.chained_assignment = None
+
 
 class SustainaMeal:
     def __init__(self, recipes_df, nutrients, load=False,
@@ -248,7 +251,7 @@ class SustainaMeal:
         """
         Use an LLM to choose the best recipe from a list ordered by sustainability and healthiness.
 
-        :param prompt: Custom prompt to override the first section of the prompt
+        :param custom_prompt: Custom prompt to override the first section of the prompt
         :param nearest_recipes: Optional DataFrame of recipes to order. If None, use the DataFrame from find_similar_recipes.
         :param alpha: Weight for sustainability score.
         :param beta: Weight for healthiness score.

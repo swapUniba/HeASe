@@ -163,6 +163,7 @@ order_by_sus_recipes = sm.order_recipe_by_sustainability(
 Use the order_recipe_by_sustainameal to sort the recipes.
 
 #### Function Definition :
+
     def order_recipe_by_sustainameal(self, nearest_recipes=None, alpha=0.7, beta=0.3):
 
         """
@@ -174,6 +175,7 @@ Use the order_recipe_by_sustainameal to sort the recipes.
         :param alpha: weight for sustainability score
         :param beta: weight for healthiness score
         """
+
 #### Usage
 - Sorts the DataFrame produced by 'find_similar_recipes', assuming it has been executed before.
 ```bash
@@ -186,9 +188,42 @@ order_by_sus_recipes = sm.order_recipe_by_sustainameal(
                                                     nearest_recipes=your_df)
 ```
 
-## Display the recommendations
+## GPT Rerank
+ Use an LLM to choose the best recipe from a list ordered by sustainameal score.
+#### Function Definition :
+
+    def choose_best_recipe_with_gpt(self, custom_prompt=None, nearest_recipes=None, alpha=0.7, beta=0.3):
+        """
+        :param custom_prompt: Custom prompt to override the first section of the prompt
+        :param nearest_recipes: Optional DataFrame of recipes to order. If None, use the DataFrame from find_similar_recipes.
+        :param alpha: Weight for sustainability score.
+        :param beta: Weight for healthiness score.
+        :return: The name of the best recipe chosen by GPT-3.5.
+        """
+#### Usage :
 ```bash
-for recipe in order_by_sus_recipes:
+sm.setup_key("YOUR_OPEN_AI_KEY")
+sm.choose_best_recipe_with_gpt(custom_prompt):
+```
+#### How Custom prompt works? 
+Custom prompt will override the first instructions
+```bash
+if custom_prompt is not None:
+    prompt = custom_prompt
+else:
+    prompt = "Using your knowledge please rank (if necessary) the following recipes from most to least recommended based on a balance of sustainability and healthiness:\n\n"
+prompt += "\n".join([
+    f"{idx + 1}. Recipe: {row['title']}"
+    for idx, row in ordered_recipes.iterrows()])
+prompt += "\n\nWhich one should I choose? Return just the name"
+```
+
+## Agent
+It is possible to initialize a primordial version of an agent
+```bash
+sm.setup_key("YOUR_OPEN_AI_KEY")
+sm.create_agent()
+sm.agent_ask("Can you suggest an alternative recipe to Lasagna?")
 ```
 
 ## SustainaMeal Command Line Interface (CLI) Guide

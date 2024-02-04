@@ -7,10 +7,6 @@ from typing import Type, Callable, Any
 from pydantic import BaseModel, Field
 
 
-# Assumiamo che questa funzione sia definita altrove nel tuo progetto
-# e che tu voglia passarla alla classe AlternativeSustainableRecipeTool.
-
-
 class CurrentRecipeInput(BaseModel):
     """Inputs for AlternativeSustainableRecipeTool"""
     recipe: str = Field(description="Name of the recipe")

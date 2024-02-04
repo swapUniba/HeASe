@@ -25,12 +25,12 @@ def test_find_similar_recipes():
 
     print(similar_recipes)
 
-    # ordered_recipes = sustainameal.order_recipe_by_healthiness()
-    # print(ordered_recipes)
-    # ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
-    # print(ordered_recipes_sus)
+    ordered_recipes = sustainameal.order_recipe_by_healthiness()
+    print(ordered_recipes)
+    ordered_recipes_sus = sustainameal.order_recipe_by_sustainability()
+    print(ordered_recipes_sus)
     order_recipes_final = sustainameal.order_recipe_by_sustainameal()
-    # print(order_recipes_final)
+    print(order_recipes_final)
 
     # sustainameal.setup_openai_key("open-ai-key")
     # best_choice_by_llm = sustainameal.choose_best_recipe_with_gpt()
@@ -38,9 +38,9 @@ def test_find_similar_recipes():
 
     # print(order_recipes_final)
     # print(best_choice_by_llm)
-    sustainameal.setup_openai_key("your-openai-key")
-    sustainameal.create_agent()
-    print(sustainameal.agent_ask("Can you suggest an alternative recipe to Pasta alla carbonara?"))
+    #sustainameal.setup_openai_key("your-openai-key")
+    #sustainameal.create_agent()
+    #print(sustainameal.agent_ask("Can you suggest an alternative recipe to Pasta alla carbonara?"))
 
 
 # Esecuzione del test
