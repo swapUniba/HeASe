@@ -97,11 +97,11 @@ def sort_recipes_by_sustainability_score(nearest_recipes, recipes_df, score_fiel
 
         # Sort the filtered DataFrame based on the score field, and then by the secondary_sort_field
         sorted_recipes_df = filtered_recipes_df.sort_values(by=[score_field, secondary_sort_field],
-                                                            ascending=[True, False])
+                                                            ascending=[False, False])
 
         # Calculate the sustainability increment
         sorted_recipes_df['sustainability_increment'] = ((filtered_recipes_df[
-                                                              'sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * -100
+                                                              'sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * 100
 
         # Select only relevant columns and the top recipes
         top_sorted_recipes = sorted_recipes_df[
@@ -163,7 +163,7 @@ def sort_recipes_by_sustainameal_score(nearest_recipes, recipes_df, input_recipe
 
         # Calculate increments
         sorted_recipes_df['sustainability_increment'] = ((sorted_recipes_df[
-                                                              'sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * -100
+                                                              'sustainability_score'] - input_recipe_sus_score) / input_recipe_sus_score) * 100
         sorted_recipes_df['healthiness_increment'] = ((sorted_recipes_df[
                                                            'who_score'] - input_recipe_heal_score) / input_recipe_heal_score) * 100
 
@@ -187,5 +187,5 @@ def sort_recipes_by_sustainameal_score(nearest_recipes, recipes_df, input_recipe
 
 
 def calculate_sustainameal_score(sustainability_score, who_score, alpha, beta):
-    sustainameal_score = (1 - sustainability_score) * alpha + who_score * beta
+    sustainameal_score = sustainability_score * alpha + who_score * beta
     return sustainameal_score

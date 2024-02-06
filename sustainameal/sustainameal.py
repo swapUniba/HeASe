@@ -1,7 +1,7 @@
 from .agent import Agent, AlternativeSustainableRecipeTool
 from .nutrition_vectorizer import NutritionVectorizer
 from .transformer_embeddings import RecipeTransformer
-from .preprocessing import remove_duplicate_titles, remove_recipes_without_tags
+from .preprocessing import remove_duplicate_titles, remove_recipes_without_tags, invert_sustanability_score
 from .search import find_similar_by_title, find_nearest_recipes_by_tags_and_id, \
     find_nearest_recipes_by_nutrients_and_tags
 from .utils import calculate_centroids_and_find_common_tags, save_data, load_data, save_dataframe, load_dataframe
@@ -73,6 +73,7 @@ class SustainaMeal:
     def _process_and_save_data(self, recipes_df):
         recipes_df = remove_duplicate_titles(recipes_df)
         recipes_df = remove_recipes_without_tags(recipes_df)
+        recipes_df = invert_sustanability_score(recipes_df)
         self.recipes_df = recipes_df
         save_dataframe(self.recipes_df, 'stored_data/processed_recipes_df.pkl')
 
