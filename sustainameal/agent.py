@@ -16,12 +16,11 @@ class AlternativeSustainableRecipeTool(BaseTool):
     name = "AlternativeSustainableRecipeTool"
     description = """
         Useful when you want to get alternative recipes to a given recipe. This tool return a an alternative recipe.
-        When this tool answers use your knowledge to justify the suggestion.
         """
 
     args_schema: Type[BaseModel] = CurrentRecipeInput
 
-    # Non utilizzare Pydantic per questo attributo
+
     get_alternative_recipe: Callable = None
 
     def __init__(self, **data):
