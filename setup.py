@@ -1,14 +1,11 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='SustainaMeal',
+    name='HeASe',
     version='0.1.0',
-    author='Giovanni Tempesta , Michele Ciro Di Carlo',
-    author_email='info@tempestagiovanni.it , m.dicarlo6@studenti.uniba.it ',
     description='A library to suggest more sustainable or healthy alternative recipes.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    url='https://github.com/GiovTemp/SustainaMeal.git',
     packages=find_packages(),
     install_requires=[
         'numpy',
