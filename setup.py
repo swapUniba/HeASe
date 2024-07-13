@@ -6,7 +6,7 @@ setup(
     description='A library to suggest more sustainable or healthy alternative recipes.',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
-    packages=find_packages(),
+    packages=find_packages(where='sustainameal'),
     install_requires=[
         'numpy',
         'pandas',
@@ -19,7 +19,8 @@ setup(
         'nltk',
         'openai==0.28',
         'langchain',
-        'pydantic'
+        'pydantic',
+        'langchain_community'
 
     ],
     classifiers=[
