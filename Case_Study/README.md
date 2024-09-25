@@ -1,3 +1,6 @@
+# EXTRA FILES
+https://www.mediafire.com/folder/64xjvmegf45c2/Case_Study
+
 # Introduction
 This repo is the used to store the all the data and notebooks of our project called Sustainameal. This is a library that we built which is used to get the most sustainable and healthy alternative recipe to a given one.
 
