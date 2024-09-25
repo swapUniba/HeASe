@@ -5,3 +5,5 @@
 /build/*
 /dist/*
 /SustainaMeal.egg-info/*
+*.pkl
+Case_Study/data/final_recipes_set.csv
