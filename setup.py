@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='HeASe',
+    name='sustainameal',
     version='0.1.0',
     description='A library to suggest more sustainable or healthy alternative recipes.',
     long_description=open('README.md').read(),
