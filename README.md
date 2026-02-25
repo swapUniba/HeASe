@@ -1,3 +1,10 @@
+# Ack
+We acknowledge the support of the project PHaSE (CUP H53D23003530006) - Promoting Healthy and Sustainable Eating through Interactive and Explainable AI Methods, funded by MUR under the PRIN program
+
+![LOGO PRIN](logo.png)
+
+---
+
 # HeASe
 
 ![HeASe Architecture](docs/HeASe.png)
@@ -284,6 +291,3 @@ HeASe order_by_sustainability "Quinoa Salad" --k 5 --acceptable_tags side-dishes
 ```
 
 ---
-
-# Ack
-We acknowledge the support of the project PHaSE (CUP H53D23003530006) - Promoting Healthy and Sustainable Eating through Interactive and Explainable AI Methods, funded by MUR under the PRIN program
