@@ -282,3 +282,8 @@ HeASe find_similar "Pasta with Tomato" --k 5 --acceptable_tags main-dish --check
 ```bash
 HeASe order_by_sustainability "Quinoa Salad" --k 5 --acceptable_tags side-dishes --check_sustainability --score sustainability_score --secondary_sort_field who_score
 ```
+
+---
+
+# Ack
+We acknowledge the support of the project PHaSE (CUP H53D23003530006) - Promoting Healthy and Sustainable Eating through Interactive and Explainable AI Methods, funded by MUR under the PRIN program
